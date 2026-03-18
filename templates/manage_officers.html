@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Security Officers</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<header>DUT SafeAlert - Manage Security Officers</header>
+
+<div class="container">
+
+    <h2>Security Officers Status</h2>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-message">
+          {% for category, message in messages %}
+            <p class="{{ category }}">{{ message }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <table border="1" width="100%">
+        <tr>
+            <th>Personnel ID</th>
+            <th>Name</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Campus</th>
+            <th>Duty Status</th>
+            <th>Hire Date</th>
+            <th>Actions</th>
+        </tr>
+
+        {% for item in officers %}
+        <tr>
+            <td>{{ item.officer.personnel_id }}</td>
+            <td>{{ item.officer.name }}</td>
+            <td>{{ item.officer.username }}</td>
+            <td>{{ item.email }}</td>
+            <td>
+                {% if item.campus %}
+                    {{ item.campus }}
+                {% else %}
+                    Not Signed In
+                {% endif %}
+            </td>
+            <td>
+                {% if item.officer.status == "On Duty" %}
+                    <span class="duty-on">ON DUTY</span>
+                {% else %}
+                    <span class="duty-off">OFF DUTY</span>
+                {% endif %}
+            </td>
+            <td>
+                {{ item.officer.hire_date.strftime("%d %b %Y") if item.officer.hire_date else "N/A" }}
+            </td>
+            <td>
+                <form action="{{ url_for('remove_officer', officer_id=item.officer.id) }}" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-danger">Remove</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <hr>
+
+    <h2>Add New Security Officer</h2>
+
+    <form method="POST">
+        <label>Name</label><br>
+        <input type="text" name="name" required><br><br>
+
+        <label>Username</label><br>
+        <input type="text" name="username" required><br><br>
+
+        <label>Email</label><br>
+        <input type="text" name="email" required><br><br>
+
+        <label>Password</label><br>
+        <input type="password" name="password" required><br><br>
+
+        <label>Hire Date</label><br>
+        <input type="date" name="hire_date" required><br><br>
+
+        <button type="submit" class="btn">Add Officer</button>
+    </form>
+
+    <br>
+    <a href="{{ url_for('head_dashboard') }}" class="btn">Back to Dashboard</a>
+
+</div>
+
+</body>
+</html>

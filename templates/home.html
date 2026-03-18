@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DUT SafeAlert</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>DUT SafeAlert</header>
+
+    <div class="hero">
+        <h1>Welcome to DUT SafeAlert</h1>
+        <p>Your one-stop platform to report incidents and keep our campuses safe. Stay informed, stay secure, and help us maintain a safe learning environment.</p>
+        <div style="margin-top:30px;">
+            <a href="{{ url_for('select_role') }}" class="btn">Login</a>
+            <a href="{{ url_for('register') }}" class="btn">Register</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Our Campuses</h2>
+        <div class="hero-images">
+            <img src="{{ url_for('static', filename='images/ritson.jpg') }}" alt="Ritson Campus">
+            <img src="{{ url_for('static', filename='images/steve_biko.jpg') }}" alt="Steve Biko Campus">
+            <img src="{{ url_for('static', filename='images/ml_sultan.jpg') }}" alt="ML Sultan Campus">
+        </div>
+
+        <div style="margin-top: 20px;">
+            <p><strong>Fun Fact:</strong> DUT has over 30,000 students and multiple campuses dedicated to innovation and technology!</p>
+            <p><strong>Fun Fact:</strong> Students can now report incidents instantly via SafeAlert.</p>
+        </div>
+    </div>
+
+    <footer>&copy; 2026 Durban University of Technology</footer>
+</body>
+</html>

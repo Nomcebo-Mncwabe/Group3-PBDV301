@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Investigate Incident</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<header>DUT SafeAlert - Investigate Incident</header>
+
+<div class="container">
+
+<h2>Investigate Incident</h2>
+
+<p><strong>Title:</strong> {{ incident.title }}</p>
+<p><strong>Description:</strong> {{ incident.description }}</p>
+<p><strong>Campus:</strong> {{ incident.location }}</p>
+<p><strong>Status:</strong> {{ incident.status }}</p>
+
+<form method="POST">
+
+<div class="form-group">
+    <label>Investigation Notes</label>
+    <textarea name="investigation_notes" rows="5">{{ incident.investigation_notes or '' }}</textarea>
+</div>
+
+<div class="form-group">
+    <label>Resolution Notes</label>
+    <textarea name="resolution_notes" rows="5">{{ incident.resolution_notes or '' }}</textarea>
+</div>
+
+<div class="form-group">
+    <label>Status</label>
+    <select name="status">
+        <option value="Pending" {% if incident.status == 'Pending' %}selected{% endif %}>Pending</option>
+        <option value="In Progress" {% if incident.status == 'In Progress' %}selected{% endif %}>In Progress</option>
+        <option value="Resolved" {% if incident.status == 'Resolved' %}selected{% endif %}>Resolved</option>
+    </select>
+</div>
+
+<button type="submit">Save Investigation Update</button>
+</form>
+
+<br>
+
+<a href="{{ url_for('officer_view_incidents') }}" class="btn">Back</a>
+
+</div>
+
+</body>
+</html>

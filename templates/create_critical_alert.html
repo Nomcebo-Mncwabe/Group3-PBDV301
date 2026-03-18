@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Critical Alert</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<header>DUT SafeAlert - Create Critical Alert</header>
+
+<div class="container">
+
+<h2>Create Critical Alert</h2>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class="flash-message">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endwith %}
+
+<form method="POST">
+    <div class="form-group">
+        <label>Message</label>
+        <textarea name="message" placeholder="Enter critical alert message" required></textarea>
+    </div>
+
+    <div class="form-group">
+        <label>Link to Existing Incident (optional)</label>
+        <select name="incident_id">
+            <option value="">None</option>
+            {% for incident in incidents %}
+                <option value="{{ incident.id }}">{{ incident.title }} - {{ incident.location }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Incident Title (if not linking to existing incident)</label>
+        <input type="text" name="incident_title" placeholder="Enter incident title">
+    </div>
+
+    <div class="form-group">
+        <label>Incident Location (if not linking to existing incident)</label>
+        <input type="text" name="incident_location" placeholder="Enter incident location">
+    </div>
+
+    <button type="submit">Create Alert</button>
+</form>
+
+<br><hr>
+
+<h3>Previously Created Critical Alerts</h3>
+
+{% if previous_alerts %}
+    <table>
+        <tr>
+            <th>Message</th>
+            <th>Incident</th>
+            <th>Created At</th>
+        </tr>
+        {% for alert in previous_alerts %}
+        <tr>
+            <td>{{ alert.message }}</td>
+            <td>
+                {% if alert.incident %}
+                    {{ alert.incident.title }} - {{ alert.incident.location }}
+                {% elif alert.incident_title %}
+                    {{ alert.incident_title }} - {{ alert.incident_location }}
+                {% else %}
+                    N/A
+                {% endif %}
+            </td>
+            <td>{{ alert.timestamp.strftime("%Y-%m-%d %H:%M:%S") }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <p>No critical alerts created yet.</p>
+{% endif %}
+
+<br>
+<a href="{{ url_for('head_dashboard') }}" class="btn">Back to Dashboard</a>
+
+</div>
+</body>
+</html>

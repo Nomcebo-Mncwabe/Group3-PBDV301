@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ role }} Login</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>DUT SafeAlert - {{ role }} Login</header>
+
+    <div class="container">
+
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            {% for message in messages %}
+              <div class="flash-message">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <h2>{{ role }} Login</h2>
+
+        <form method="POST">
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" name="username" placeholder="Enter your username" required>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Enter your password" required>
+            </div>
+            <input type="submit" value="Login" class="btn">
+        </form>
+
+        <div style="margin-top:20px; text-align:center;">
+            <a href="{{ url_for('select_role') }}" class="btn">Back to Role Selection</a>
+            {% if role != "Head of Security" %}
+                <a href="{{ url_for('register') }}" class="btn">Register</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <footer>&copy; 2026 Durban University of Technology</footer>
+</body>
+</html>

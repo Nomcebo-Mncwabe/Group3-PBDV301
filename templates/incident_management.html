@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Incident Management - Head of Security</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<header>DUT SafeAlert - Incident Management</header>
+
+<div class="container">
+
+<h2>All Reported Incidents</h2>
+
+<!-- Flash messages -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+<div class="flash-message">
+{% for category, message in messages %}
+<p class="{{ category }}">{{ message }}</p>
+{% endfor %}
+</div>
+{% endif %}
+{% endwith %}
+
+<table border="1" width="100%">
+
+<tr>
+<th>Title</th>
+<th>Description</th>
+<th>Location</th>
+<th>Reported By</th>
+<th>Severity</th>
+<th>Status</th>
+<th>Assigned Officer</th>
+<th>Officers On Duty</th>
+</tr>
+
+{% for incident in incidents %}
+
+<tr>
+
+<td>{{ incident.title }}</td>
+<td>{{ incident.description }}</td>
+<td>{{ incident.location }}</td>
+
+<td>
+{% if incident.reporter %}
+{{ incident.reporter.username }}
+{% else %}
+Anonymous
+{% endif %}
+</td>
+
+<td>
+
+<form method="POST" action="{{ url_for('update_incident_severity', incident_id=incident.id) }}">
+
+<select name="severity">
+
+<option value="Minor" {% if incident.severity=="Minor" %}selected{% endif %}>Minor</option>
+
+<option value="Moderate" {% if incident.severity=="Moderate" %}selected{% endif %}>Moderate</option>
+
+<option value="Severe" {% if incident.severity=="Severe" %}selected{% endif %}>Severe</option>
+
+<option value="Critical" {% if incident.severity=="Critical" %}selected{% endif %}>Critical</option>
+
+</select>
+
+<button type="submit">Update</button>
+
+</form>
+
+</td>
+
+<td>{{ incident.status }}</td>
+
+<td>
+
+{% if incident.assigned_officer %}
+
+{{ incident.assigned_officer.name }}
+
+{% else %}
+
+Not Assigned
+
+{% endif %}
+
+</td>
+<td>
+
+{% if incident.assigned_officer %}
+
+<span style="color:white; background-color:green; padding:6px 10px; border-radius:5px;">
+Assigned
+</span>
+
+{% else %}
+
+<form action="{{ url_for('assign_officer', incident_id=incident.id) }}" method="POST">
+<select name="officer_id">
+
+{% for officer in officers %}
+
+<option value="{{ officer.officer.id }}">
+{{ officer.officer.name }} ({{ officer.officer.status }})
+</option>
+
+{% endfor %}
+
+</select>
+
+<button type="submit">Assign</button>
+
+</form>
+
+{% endif %}
+
+</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+<br>
+
+<a href="{{ url_for('head_dashboard') }}">
+<button>Back to Dashboard</button>
+</a>
+
+</div>
+
+</body>
+</html>

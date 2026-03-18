@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>DUT SafeAlert - Student Dashboard</header>
+
+    <div class="container">
+        <h2>Welcome {{ session['username'] }}!</h2>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-message">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- CRITICAL ALERTS BUTTON -->
+        <div style="margin-bottom:20px;">
+            <a href="{{ url_for('view_critical_alerts') }}" class="btn btn-warning">
+                <i class="fa fa-exclamation-circle"></i> Critical Alerts
+                {% if critical_alert_count > 0 %}
+                    <span class="badge badge-danger">{{ critical_alert_count }}</span>
+                {% endif %}
+            </a>
+        </div>
+
+
+        <div class="dashboard-cards">
+            <div class="card">
+                <h3>Report Incident</h3>
+                <p>Submit a new safety incident report.</p>
+                <a href="{{ url_for('report_incident') }}">
+                    <button>Report Now</button>
+                </a>
+            </div>
+            <div class="card">
+                <h3>View Incident Status</h3>
+                <p>View incident status updates </p>
+                <a href="{{ url_for('view_incident_status') }}" class="btn">View Incident Status</a>
+            </div>
+        </div>
+
+        <div style="margin-top:30px;">
+            <a href="{{ url_for('home') }}"><button>Logout</button></a>
+        </div>
+    </div>
+
+    <footer>&copy; 2026 Durban University of Technology</footer>
+</body>
+</html>

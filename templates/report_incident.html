@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Report Incident</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<div class="main-card container">
+
+    <h2>Report a Safety Incident</h2>
+
+    <form method="POST">
+
+        <div class="form-group">
+            <label for="title">Incident Title</label>
+            <input type="text" id="title" name="title" placeholder="Enter incident title" required>
+        </div>
+
+        <div class="form-group">
+            <label for="location">Select Campus</label>
+            <select id="location" name="location" required>
+                <option value="">Choose Campus</option>
+                <option value="Ritson Campus">Ritson Campus</option>
+                <option value="ML Sultan Campus">ML Sultan Campus</option>
+                <option value="Steve Biko Campus">Steve Biko Campus</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="incident_date">Date of Incident</label>
+            <input type="date" id="incident_date" name="incident_date" required>
+        </div>
+
+        <div class="form-group">
+            <label>Category</label>
+            <select name="category" required>
+                <option value="" disabled selected>Select Category</option>
+                <option value="Harassment">Harassment</option>
+                <option value="Theft">Theft</option>
+                <option value="Hit and Run">Hit and Run</option>
+                <option value="Suspicious Activity">Suspicious Activity</option>
+                <option value="Academic Disturbance">Academic Disturbance</option>
+                <option value="Natural Disaster">Natural Disaster</option>
+                <option value="Medical Emergency">Medical Emergency</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Describe What Happened</label>
+            <textarea id="description" name="description" rows="5" placeholder="Provide a detailed description..." required></textarea>
+        </div>
+
+        <button type="submit" class="btn">Submit Report</button>
+        <a href="{{ url_for('student_dashboard') }}" class="btn">Back to Dashboard</a>
+
+    </form>
+
+    <hr>
+
+    <h4>Student Support</h4>
+    <p>
+        If this incident involves harassment, trauma, or emotional distress, DUT offers confidential counselling services.
+    </p>
+
+    <p>Steve Biko Campus – Student Counselling Services</p>
+
+    <p>Students can seek professional support for safety, wellbeing, and mental health assistance.</p>
+
+</div>
+
+</body>
+</html>

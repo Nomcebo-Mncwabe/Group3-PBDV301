@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Officer Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>DUT SafeAlert - Security Officer Dashboard</header>
+
+
+    <div class="container">
+        <h2>Welcome {{ session['username'] }}!</h2>
+        <p>Manage incidents and issue alerts to campus users.</p>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-message">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <div class="dashboard-cards">
+            <div class="card">
+                <h3>View Incidents & Assigned Taks</h3>
+                <p>Access a complete list of all reported incidents, including pending and ongoing cases.</p>
+                <a href="{{ url_for('officer_view_incidents') }}"><button>View Incidents</button></a>
+            </div>
+            <div class="card">
+                <h3>Sign In & Sign Out</h3>
+                <p>Record personnel attendance and notify relevant parties about safety updates.</p>
+                <a href="{{ url_for('attendance') }}" class="btn">Sign In & Sign Out</a>
+            </div>
+        </div>
+
+        <div style="margin-top:30px;">
+            <a href="{{ url_for('home') }}"><button>Logout</button></a>
+        </div>
+    </div>
+
+    <footer>&copy; 2026 Durban University of Technology</footer>
+</body>
+</html>

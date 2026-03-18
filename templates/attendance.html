@@ -1,0 +1,56 @@
+<!-- templates/attendance_form.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Security Attendance</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <h2>Security Attendance</h2>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="flash-message">
+          {% for message in messages %}
+            <p>{{ message }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('attendance') }}">
+        <div class="form-group">
+            <label>Name:</label>
+            <input type="text" name="username" value="{{ personnel.username }}" readonly>
+        </div>
+
+        {% if personnel.status == 'Off Duty' %}
+            <div class="form-group">
+                <label>Select Campus:</label>
+                <select name="campus" required>
+                    <option value="">Select Campus</option>
+                    <option value="Ritson Campus">Ritson Campus</option>
+                    <option value="ML Sultan Campus">ML Sultan Campus</option>
+                    <option value="Steve Biko Campus">Steve Biko Campus</option>
+                </select>
+            </div>
+            <button type="submit" name="action" value="sign_in">Sign In</button>
+        {% elif personnel.status == 'On Duty' %}
+            <div class="form-group">
+                <label>Current Campus:</label>
+                <input type="text" value="{{ last_attendance.campus if last_attendance else 'N/A' }}" readonly>
+            </div>
+            <button type="submit" name="action" value="sign_out">Sign Out</button>
+        {% endif %}
+    </form>
+
+    {% if last_attendance %}
+        <p>Last Sign In: {{ last_attendance.sign_in_time.strftime('%Y-%m-%d %H:%M:%S') if last_attendance.sign_in_time else 'N/A' }}</p>
+        <p>Last Sign Out: {{ last_attendance.sign_out_time.strftime('%Y-%m-%d %H:%M:%S') if last_attendance.sign_out_time else 'N/A' }}</p>
+    {% endif %}
+
+    <br>
+    <a href="{{ url_for('officer_dashboard') }}" class="btn">Back to Dashboard</a>
+</body>
+</html>
+

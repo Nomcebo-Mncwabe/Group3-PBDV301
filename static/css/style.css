@@ -1,0 +1,424 @@
+/* ===== GLOBAL STYLES ===== */
+/* Remove underline from ALL links */
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Ensure links styled as buttons look correct */
+a.btn {
+    display: inline-block;
+}
+body {
+    font-family: 'Roboto', sans-serif;
+    background: #F4F4F4;
+    color: #2B2B2B;
+    margin: 0;
+    padding: 0;
+}
+
+/* ===== HEADER ===== */
+header {
+    background: #2B2B2B;
+    color: #FFFFFF;
+    padding: 25px 20px;
+    text-align: center;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* ===== HOMEPAGE HERO ===== */
+.hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 50px 20px;
+    text-align: center;
+    background: #800020; /* burgundy hero banner */
+    color: #fff;
+}
+
+.hero h1 {
+    font-size: 48px;
+    margin-bottom: 15px;
+    font-weight: 900;
+}
+
+.hero p {
+    font-size: 20px;
+    max-width: 700px;
+    line-height: 1.6;
+}
+
+.hero-images {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.hero-images img {
+    width: 300px;
+    height: 200px;
+    object-fit: cover;        /* ensures image fills box nicely */
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease;
+}
+
+.hero-images img:hover {
+    transform: scale(1.05);
+}
+
+/* ===== CONTAINERS ===== */
+.container {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 30px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+/* ===== BUTTONS ===== */
+button, .btn {
+    background-color: #800020;
+    color: #fff;
+    border: none;
+    padding: 14px 28px;
+    margin: 5px 0;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+button:hover, .btn:hover {
+    background-color: #4d0011;
+    transform: translateY(-2px);
+}
+
+/* ===== INPUTS ===== */
+input, select, textarea {
+    width: 80%;
+    max-width: 500px;
+    padding: 12px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+/* ===== DASHBOARD CARDS ===== */
+.dashboard-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin-top: 30px;
+}
+
+.card {
+    background: #2B2B2B;
+    color: #fff;
+    padding: 25px;
+    text-align: center;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+.card h3 {
+    font-size: 22px;
+    margin-bottom: 10px;
+}
+
+.card p {
+    font-size: 15px;
+}
+
+/* ===== Flash Messages (success) ===== */
+.flash-message {
+    background: #d4edda;  /* light green */
+    color: #155724;       /* dark green text */
+    padding: 12px;
+    margin: 15px 0;
+    border-radius: 6px;
+    border: 1px solid #c3e6cb;
+    font-weight: 600;
+}
+
+/* ===== FOOTER ===== */
+footer {
+    background: #2B2B2B;
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+    font-size: 14px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+
+/* ===== TABLES ===== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background: #f2f2f2; /* light grey */
+    color: #2B2B2B;      /* dark text */
+    font-weight: 700;
+    font-size: 16px;
+    text-align: left;
+    padding: 12px;
+}
+
+tr:nth-child(even) {
+    background: #f2f2f2;
+}
+
+/* ===== HERO IMAGES ===== */
+.hero-images {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.hero-images img {
+    width: 300px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+}
+
+.hero-images img:hover {
+    transform: scale(1.05);
+}
+
+/* Apply button style to all buttons and submit inputs */
+button,
+input[type="submit"],
+.btn {
+    background-color: #800020; /* burgundy */
+    color: #fff;
+    border: none;
+    padding: 14px 28px;
+    margin: 5px 0;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    display: inline-block;
+    text-align: center;
+}
+
+button:hover,
+input[type="submit"]:hover,
+.btn:hover {
+    background-color: #4d0011;
+    transform: translateY(-2px);
+}
+
+/* ===== Form layout ===== */
+.form-group {
+    display: flex;
+    flex-direction: column; /* label on top of input/textarea */
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 16px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 80%;
+    max-width: 500px;       /* prevents them from stretching too far on large screens */
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+/* ===== ROLE SELECTION CARDS ===== */
+.role-buttons {
+    display: flex;
+    justify-content: center;       /* center horizontally */
+    gap: 20px;                     /* space between cards */
+    flex-wrap: nowrap;             /* all in one line */
+    margin-top: 40px;
+}
+
+.role-buttons a {
+    display: flex;                 /* make link a flex container */
+    flex-direction: column;        /* stack icon/text if needed */
+    justify-content: center;
+    align-items: center;
+    width: 180px;                  /* card width */
+    height: 120px;                 /* card height */
+    background-color: #800020;     /* burgundy */
+    color: #fff;
+    text-decoration: none;         /* remove underline */
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    transition: all 0.3s ease;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+}
+
+.role-buttons a:hover {
+    background-color: #4d0011;
+    transform: translateY(-3px) scale(1.05);
+}
+
+/* hide the inner <button> if you still want to keep HTML structure */
+.role-buttons button {
+    display: none;
+}
+
+/* ===== Duty Status ===== */
+/* ===== Duty Status Badges ===== */
+.duty-on {
+    display: inline-block;
+    background-color: #28a745; /* green */
+    color: #fff;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 4px 10px; /* tighter padding */
+    border-radius: 12px; /* pill shape */
+    text-align: center;
+    min-width: 70px; /* ensures all badges are same width */
+}
+
+.duty-off {
+    display: inline-block;
+    background-color: #dc3545; /* red */
+    color: #fff;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 4px 10px; /* tighter padding */
+    border-radius: 12px;
+    text-align: center;
+    min-width: 70px;
+}
+
+/* ===== Employment Status ===== */
+.status-active {
+    background-color: #3498db; /* blue */
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.status-retired {
+    background-color: gray;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.status-dismissed {
+    background-color: black;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+/* ===== STATUS DROPDOWN COLORS ===== */
+
+.status-pending {
+    background-color: orange;
+    color: white;
+}
+
+.status-in-progress {
+    background-color: gold;
+    color: black;
+}
+
+.status-resolved {
+    background-color: lightgreen;
+    color: black;
+}
+/* ---- Alert Messages ----*/
+.alert-box {
+    background-color: #ffcccc;
+    border: 2px solid red;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.alert-item {
+    font-weight: bold;
+    color: red;
+    margin-bottom: 5px;
+}
+
+/* ================= INCIDENT FILTER GRID ================= */
+/* ================= INCIDENT FILTER GRID ================= */
+
+.filter-form {
+    margin-bottom: 25px;
+}
+
+.filter-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px 25px; /* vertical spacing, horizontal spacing */
+}
+
+.filter-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.filter-item label {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+/* Override global input width rules */
+.filter-item select,
+.filter-item input[type="date"] {
+    width: 100% !important;
+    max-width: none !important;
+    padding: 8px;
+    margin: 0;
+}
+
+/* ===== Filter Button ===== */
+
+.filter-button {
+    grid-column: span 3;   /* makes button take full width row */
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+

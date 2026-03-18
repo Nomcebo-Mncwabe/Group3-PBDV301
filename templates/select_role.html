@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Select Your Role</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>DUT SafeAlert System</header>
+
+    <div class="container">
+        <h2>Who are you?</h2>
+
+        <div class="role-buttons">
+            <a href="{{ url_for('login', role='Student') }}" class="role-card">Student</a>
+            <a href="{{ url_for('login', role='Lecturer') }}" class="role-card">Lecturer</a>
+            <a href="{{ url_for('login', role='Security Officer') }}" class="role-card">Security Officer</a>
+            <a href="{{ url_for('login', role='Head of Security') }}" class="role-card">Head of Security</a>
+        </div>
+
+        <div style="text-align:center; margin-top:20px;">
+            <a href="{{ url_for('home') }}" class="btn">Back to Home</a>
+        </div>
+    </div>
+
+    <footer>&copy; 2026 Durban University of Technology</footer>
+</body>
+</html>

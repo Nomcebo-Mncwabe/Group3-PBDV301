@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Incident Reports</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        /* Incident card layout */
+        .incident-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .incident-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+        }
+
+        .incident-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .incident-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .badge {
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .status-pending { background-color: orange; color: white; }
+        .status-in-progress { background-color: gold; color: black; }
+        .status-resolved { background-color: lightgreen; color: black; }
+
+        .severity-minor { background-color: #d1ecf1; color: #0c5460; }
+        .severity-moderate { background-color: #ffeeba; color: #856404; }
+        .severity-severe { background-color: #f8d7da; color: #721c24; }
+        .severity-critical { background-color: #f5c6cb; color: #721c24; font-weight: 700; }
+
+        .incident-body {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px 20px;
+            margin-top: 10px;
+        }
+
+        .incident-item {
+            margin-bottom: 6px;
+        }
+
+        .incident-item strong {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .incident-notes {
+            margin-top: 10px;
+        }
+
+        .incident-notes h4 {
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .incident-notes p {
+            margin: 0;
+            padding-left: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<header>DUT SafeAlert - My Incident Reports</header>
+
+<div class="container">
+
+<h2>My Incident Reports</h2>
+
+<form method="GET" action="{{ url_for('view_incident_status') }}" class="filter-form">
+    <div class="filter-grid">
+        <div class="filter-item">
+            <label>Status</label>
+            <select name="status">
+                <option value="All">All</option>
+                <option value="Pending">Pending</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Resolved">Resolved</option>
+            </select>
+        </div>
+        <div class="filter-item">
+            <label>Severity</label>
+            <select name="severity">
+                <option value="All">All</option>
+                <option value="Minor">Minor</option>
+                <option value="Moderate">Moderate</option>
+                <option value="Severe">Severe</option>
+                <option value="Critical">Critical</option>
+            </select>
+        </div>
+        <div class="filter-item">
+            <label>Category</label>
+            <select name="category">
+                <option value="All">All</option>
+                <option value="Harassment">Harassment</option>
+                <option value="Theft">Theft</option>
+                <option value="Hit and Run">Hit and Run</option>
+                <option value="Suspicious Activity">Suspicious Activity</option>
+                <option value="Academic Disturbance">Academic Disturbance</option>
+                <option value="Natural Disaster">Natural Disaster</option>
+                <option value="Medical Emergency">Medical Emergency</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+        <div class="filter-item">
+            <label>From</label>
+            <input type="date" name="start_date">
+        </div>
+
+        <br></br>
+
+        <div class="filter-item">
+            <label>To</label>
+            <input type="date" name="end_date">
+        </div>
+        <div class="filter-item">
+            <label>&nbsp;</label>
+            <button type="submit">Filter</button>
+        </div>
+    </div>
+</form>
+
+{% if incidents %}
+    {% for incident in incidents %}
+        <div class="incident-card">
+            <div class="incident-header">
+                <div class="incident-title">{{ incident.title }}</div>
+                <div class="badge status-{{ incident.status|lower|replace(' ','-') }}">{{ incident.status }}</div>
+            </div>
+
+            <div class="incident-body">
+                <div class="incident-item"><strong>Category:</strong> {{ incident.category }}</div>
+                <div class="incident-item"><strong>Date:</strong> {{ incident.incident_date }}</div>
+                <div class="incident-item"><strong>Campus:</strong> {{ incident.location }}</div>
+                <div class="incident-item"><strong>Severity:</strong>
+                    <span class="badge severity-{{ incident.severity|lower }}">{{ incident.severity if incident.severity else 'N/A' }}</span>
+                </div>
+                <div class="incident-item"><strong>Assigned Officer:</strong> {{ incident.assigned_officer.name if incident.assigned_officer else 'N/A' }}</div>
+            </div>
+
+            {% if incident.investigation_notes %}
+            <div class="incident-notes">
+                <h4>Investigation Notes:</h4>
+                <p>{{ incident.investigation_notes }}</p>
+            </div>
+            {% endif %}
+
+            {% if incident.resolution_notes %}
+            <div class="incident-notes">
+                <h4>Resolution Notes:</h4>
+                <p>{{ incident.resolution_notes }}</p>
+            </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+{% else %}
+    <p>You have not reported any incidents yet.</p>
+{% endif %}
+
+<br>
+<a href="{% if session['role'] == 'Lecturer' %}{{ url_for('lecturer_dashboard') }}{% else %}{{ url_for('student_dashboard') }}{% endif %}" class="btn">Back</a>
+
+</div>
+
+</body>
+</html>
