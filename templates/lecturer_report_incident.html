@@ -1,76 +1,219 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>Report Incident</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .report-wrapper {
+            max-width: 680px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .page-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e1e1e;
+            margin-bottom: 4px;
+        }
+
+        .page-subtitle {
+            color: #5a5a5a;
+            font-size: 15px;
+            margin-bottom: 32px;
+        }
+
+        .report-box {
+            background: #fff;
+            border-radius: 12px;
+            padding: 36px 40px;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+            border: 1px solid #e2e0dd;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: #5a5a5a;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            max-width: 100%;
+            padding: 11px 14px;
+            border: 1.5px solid #e2e0dd;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: 'DM Sans', sans-serif;
+            background: #faf9f7;
+            color: #1e1e1e;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
+            box-sizing: border-box;
+            margin: 0;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #800020;
+            box-shadow: 0 0 0 3px rgba(128,0,32,0.1);
+            background: #fff;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 130px;
+            line-height: 1.6;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 4px;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 768px) {
+            .report-wrapper { margin: 20px 16px; padding: 0; }
+            .report-box { padding: 24px 20px; }
+            .form-row { grid-template-columns: 1fr; }
+            .form-actions { flex-direction: column; }
+            .form-actions .btn { width: 100%; text-align: center; }
+        }
+
+        .btn-back {
+            background: transparent;
+            border: 2px solid #e2e0dd;
+            color: #5a5a5a;
+            box-shadow: none;
+        }
+
+        .btn-back:hover {
+            border-color: #800020;
+            color: #800020;
+            background: transparent;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .support-box {
+            background: #faf9f7;
+            border: 1px solid #e2e0dd;
+            border-left: 4px solid #800020;
+            border-radius: 8px;
+            padding: 20px 24px;
+            margin-top: 24px;
+        }
+
+        .support-box h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 16px;
+            margin: 0 0 10px 0;
+            color: #1e1e1e;
+        }
+
+        .support-box p {
+            font-size: 14px;
+            color: #5a5a5a;
+            margin: 0 0 6px 0;
+            line-height: 1.6;
+        }
+
+        .support-box p:last-child {
+            margin: 0;
+        }
+    </style>
 </head>
-
 <body>
+    <header>DUT SafeAlert - Report Incident</header>
 
-<div class="main-card container">
+    <div class="report-wrapper">
 
-    <h2>Report a Safety Incident</h2>
+        <div class="page-title">Report a Safety Incident</div>
+        <p class="page-subtitle">Fill in the details below to submit your incident report to campus security.</p>
 
-    <form method="POST">
+        <div class="report-box">
+            <form method="POST">
 
-        <div class="form-group">
-            <label for="title">Incident Title</label>
-            <input type="text" id="title" name="title" placeholder="Enter incident title" required>
+                <div class="form-group">
+                    <label for="title">Incident Title</label>
+                    <input type="text" id="title" name="title" placeholder="e.g. Suspicious person near lecture hall" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="location">Campus</label>
+                        <select id="location" name="location" required>
+                            <option value="">Choose Campus</option>
+                            <option value="Ritson Campus">Ritson Campus</option>
+                            <option value="ML Sultan Campus">ML Sultan Campus</option>
+                            <option value="Steve Biko Campus">Steve Biko Campus</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="incident_date">Date of Incident</label>
+                        <input type="date" id="incident_date" name="incident_date" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Category</label>
+                    <select name="category" required>
+                        <option value="" disabled selected>Select Category</option>
+                        <option value="Harassment">Harassment</option>
+                        <option value="Theft">Theft</option>
+                        <option value="Hit and Run">Hit and Run</option>
+                        <option value="Suspicious Activity">Suspicious Activity</option>
+                        <option value="Academic Disturbance">Academic Disturbance</option>
+                        <option value="Natural Disaster">Natural Disaster</option>
+                        <option value="Medical Emergency">Medical Emergency</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" rows="5" placeholder="Describe what happened in as much detail as possible..." required></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn">Submit Report</button>
+                    <a href="{{ url_for('lecturer_dashboard') }}" class="btn btn-back">Back to Dashboard</a>
+                </div>
+
+            </form>
         </div>
 
-        <div class="form-group">
-            <label for="location">Select Campus</label>
-            <select id="location" name="location" required>
-                <option value="">Choose Campus</option>
-                <option value="Ritson Campus">Ritson Campus</option>
-                <option value="ML Sultan Campus">ML Sultan Campus</option>
-                <option value="Steve Biko Campus">Steve Biko Campus</option>
-            </select>
+        <div class="support-box">
+            <h4>Staff Support</h4>
+            <p>If this incident involves harassment, trauma, or emotional distress, DUT offers confidential counselling services.</p>
+            <p>Steve Biko Campus – Student Counselling Services</p>
+            <p>Staff can seek professional support for safety, wellbeing, and mental health assistance.</p>
         </div>
 
-        <div class="form-group">
-            <label for="incident_date">Date of Incident</label>
-            <input type="date" id="incident_date" name="incident_date" required>
-        </div>
+    </div>
 
-        <div class="form-group">
-            <label>Category</label>
-            <select name="category" required>
-                <option value="" disabled selected>Select Category</option>
-                <option value="Harassment">Harassment</option>
-                <option value="Theft">Theft</option>
-                <option value="Hit and Run">Hit and Run</option>
-                <option value="Suspicious Activity">Suspicious Activity</option>
-                <option value="Academic Disturbance">Academic Disturbance</option>
-                <option value="Natural Disaster">Natural Disaster</option>
-                <option value="Medical Emergency">Medical Emergency</option>
-                <option value="Other">Other</option>
-            </select>
-        </div>
+    <footer>&copy; 2026 Durban University of Technology</footer>
 
-        <div class="form-group">
-            <label for="description">Describe What Happened</label>
-            <textarea id="description" name="description" rows="5" placeholder="Provide a detailed description..." required></textarea>
-        </div>
-
-        <button type="submit" class="btn">Submit Report</button>
-        <a href="{{ url_for('lecturer_dashboard') }}" class="btn">Back to Dashboard</a>
-
-    </form>
-
-    <hr>
-
-    <h4>Staff Support</h4>
-    <p>
-        If this incident involves harassment, trauma, or emotional distress, DUT offers confidential counselling services.
-    </p>
-
-    <p>Steve Biko Campus – Student Counselling Services</p>
-
-    <p>Students can seek professional support for safety, wellbeing, and mental health assistance.</p>
-
-</div>
-
+    <script src="{{ url_for('static', filename='js/background.js') }}"></script>
 </body>
 </html>

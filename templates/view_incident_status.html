@@ -4,79 +4,227 @@
     <title>My Incident Reports</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <style>
-        /* Incident card layout */
+        .page-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e1e1e;
+            margin-bottom: 4px;
+        }
+
+        .page-subtitle {
+            color: #5a5a5a;
+            font-size: 15px;
+            margin-bottom: 28px;
+        }
+
+        .filter-form {
+            background: #fff;
+            border: 1px solid #e2e0dd;
+            border-radius: 12px;
+            padding: 24px 28px;
+            margin-bottom: 28px;
+        }
+
+        .filter-form h4 {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: #5a5a5a;
+            margin: 0 0 16px 0;
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .filter-item {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .filter-item label {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #5a5a5a;
+        }
+
+        .filter-item select,
+        .filter-item input[type="date"] {
+            width: 100% !important;
+            max-width: none !important;
+            padding: 9px 12px;
+            margin: 0;
+            font-size: 14px;
+            border: 1.5px solid #e2e0dd;
+            border-radius: 8px;
+            background: #faf9f7;
+            font-family: 'DM Sans', sans-serif;
+            outline: none;
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+        }
+
+        .filter-item select:focus,
+        .filter-item input[type="date"]:focus {
+            border-color: #800020;
+            box-shadow: 0 0 0 3px rgba(128,0,32,0.1);
+        }
+
+        .filter-actions {
+            margin-top: 16px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
         .incident-card {
             background: #fff;
             border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 24px 28px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+            border: 1px solid #e2e0dd;
             transition: transform 0.2s, box-shadow 0.2s;
         }
 
         .incident-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.1);
         }
 
         .incident-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .incident-title {
-            font-size: 20px;
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
             font-weight: 700;
+            color: #1e1e1e;
         }
 
         .badge {
-            padding: 5px 12px;
-            border-radius: 12px;
+            padding: 4px 12px;
+            border-radius: 20px;
             font-weight: 600;
-            font-size: 14px;
-            text-align: center;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
         }
 
-        .status-pending { background-color: orange; color: white; }
-        .status-in-progress { background-color: gold; color: black; }
-        .status-resolved { background-color: lightgreen; color: black; }
+        .status-pending { background-color: #e67e00; color: white; }
+        .status-in-progress { background-color: #c9a800; color: #1a1200; }
+        .status-resolved { background-color: #1e7e34; color: white; }
 
         .severity-minor { background-color: #d1ecf1; color: #0c5460; }
         .severity-moderate { background-color: #ffeeba; color: #856404; }
         .severity-severe { background-color: #f8d7da; color: #721c24; }
-        .severity-critical { background-color: #f5c6cb; color: #721c24; font-weight: 700; }
+        .severity-critical { background-color: #800020; color: white; }
 
-        .incident-body {
+        .incident-meta-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 12px 20px;
-            margin-top: 10px;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            padding-top: 16px;
+            border-top: 1px solid #e2e0dd;
         }
 
-        .incident-item {
-            margin-bottom: 6px;
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
         }
 
-        .incident-item strong {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 3px;
+        .meta-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #888;
+        }
+
+        .meta-value {
+            font-size: 14px;
+            color: #1e1e1e;
+            font-weight: 500;
         }
 
         .incident-notes {
-            margin-top: 10px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #e2e0dd;
         }
 
-        .incident-notes h4 {
-            font-size: 16px;
-            margin-bottom: 4px;
+        .notes-label {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #800020;
+            margin-bottom: 6px;
         }
 
-        .incident-notes p {
+        .notes-text {
+            font-size: 14px;
+            color: #3a3a3a;
+            line-height: 1.6;
+            background: #faf9f7;
+            padding: 12px 16px;
+            border-radius: 8px;
+            border-left: 3px solid #800020;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 48px 20px;
+            color: #888;
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid #e2e0dd;
+        }
+
+        .empty-state p {
+            font-size: 15px;
             margin: 0;
-            padding-left: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .filter-grid { grid-template-columns: 1fr; }
+            .filter-actions { justify-content: stretch; }
+            .filter-actions .btn { width: 100%; text-align: center; }
+            .incident-meta-grid { grid-template-columns: 1fr 1fr; }
+            .filter-form { padding: 18px 16px; }
+        }
+
+        @media (max-width: 480px) {
+            .incident-meta-grid { grid-template-columns: 1fr; }
+        }
+
+        .btn-back {
+            background: transparent;
+            border: 2px solid #e2e0dd;
+            color: #5a5a5a;
+            box-shadow: none;
+            margin-top: 8px;
+        }
+
+        .btn-back:hover {
+            border-color: #800020;
+            color: #800020;
+            background: transparent;
+            transform: none;
+            box-shadow: none;
         }
     </style>
 </head>
@@ -86,102 +234,123 @@
 
 <div class="container">
 
-<h2>My Incident Reports</h2>
+    <div class="page-title">My Incident Reports</div>
+    <p class="page-subtitle">Track the status and progress of your submitted reports.</p>
 
-<form method="GET" action="{{ url_for('view_incident_status') }}" class="filter-form">
-    <div class="filter-grid">
-        <div class="filter-item">
-            <label>Status</label>
-            <select name="status">
-                <option value="All">All</option>
-                <option value="Pending">Pending</option>
-                <option value="In Progress">In Progress</option>
-                <option value="Resolved">Resolved</option>
-            </select>
-        </div>
-        <div class="filter-item">
-            <label>Severity</label>
-            <select name="severity">
-                <option value="All">All</option>
-                <option value="Minor">Minor</option>
-                <option value="Moderate">Moderate</option>
-                <option value="Severe">Severe</option>
-                <option value="Critical">Critical</option>
-            </select>
-        </div>
-        <div class="filter-item">
-            <label>Category</label>
-            <select name="category">
-                <option value="All">All</option>
-                <option value="Harassment">Harassment</option>
-                <option value="Theft">Theft</option>
-                <option value="Hit and Run">Hit and Run</option>
-                <option value="Suspicious Activity">Suspicious Activity</option>
-                <option value="Academic Disturbance">Academic Disturbance</option>
-                <option value="Natural Disaster">Natural Disaster</option>
-                <option value="Medical Emergency">Medical Emergency</option>
-                <option value="Other">Other</option>
-            </select>
-        </div>
-        <div class="filter-item">
-            <label>From</label>
-            <input type="date" name="start_date">
-        </div>
-
-        <br></br>
-
-        <div class="filter-item">
-            <label>To</label>
-            <input type="date" name="end_date">
-        </div>
-        <div class="filter-item">
-            <label>&nbsp;</label>
-            <button type="submit">Filter</button>
-        </div>
+    <div class="filter-form">
+        <h4>Filter Reports</h4>
+        <form method="GET" action="{{ url_for('view_incident_status') }}">
+            <div class="filter-grid">
+                <div class="filter-item">
+                    <label>Status</label>
+                    <select name="status">
+                        <option value="All">All</option>
+                        <option value="Pending">Pending</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Resolved">Resolved</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <label>Severity</label>
+                    <select name="severity">
+                        <option value="All">All</option>
+                        <option value="Minor">Minor</option>
+                        <option value="Moderate">Moderate</option>
+                        <option value="Severe">Severe</option>
+                        <option value="Critical">Critical</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <label>Category</label>
+                    <select name="category">
+                        <option value="All">All</option>
+                        <option value="Harassment">Harassment</option>
+                        <option value="Theft">Theft</option>
+                        <option value="Hit and Run">Hit and Run</option>
+                        <option value="Suspicious Activity">Suspicious Activity</option>
+                        <option value="Academic Disturbance">Academic Disturbance</option>
+                        <option value="Natural Disaster">Natural Disaster</option>
+                        <option value="Medical Emergency">Medical Emergency</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <label>From</label>
+                    <input type="date" name="start_date">
+                </div>
+                <div class="filter-item">
+                    <label>To</label>
+                    <input type="date" name="end_date">
+                </div>
+            </div>
+            <div class="filter-actions">
+                <button type="submit" class="btn">Apply Filters</button>
+            </div>
+        </form>
     </div>
-</form>
 
-{% if incidents %}
-    {% for incident in incidents %}
+    {% if incidents %}
+        {% for incident in incidents %}
         <div class="incident-card">
             <div class="incident-header">
                 <div class="incident-title">{{ incident.title }}</div>
                 <div class="badge status-{{ incident.status|lower|replace(' ','-') }}">{{ incident.status }}</div>
             </div>
 
-            <div class="incident-body">
-                <div class="incident-item"><strong>Category:</strong> {{ incident.category }}</div>
-                <div class="incident-item"><strong>Date:</strong> {{ incident.incident_date }}</div>
-                <div class="incident-item"><strong>Campus:</strong> {{ incident.location }}</div>
-                <div class="incident-item"><strong>Severity:</strong>
-                    <span class="badge severity-{{ incident.severity|lower }}">{{ incident.severity if incident.severity else 'N/A' }}</span>
+            <div class="incident-meta-grid">
+                <div class="meta-item">
+                    <span class="meta-label">Category</span>
+                    <span class="meta-value">{{ incident.category }}</span>
                 </div>
-                <div class="incident-item"><strong>Assigned Officer:</strong> {{ incident.assigned_officer.name if incident.assigned_officer else 'N/A' }}</div>
+                <div class="meta-item">
+                    <span class="meta-label">Date</span>
+                    <span class="meta-value">{{ incident.incident_date }}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Campus</span>
+                    <span class="meta-value">{{ incident.location }}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Severity</span>
+                    <span class="meta-value">
+                        <span class="badge severity-{{ incident.severity|lower if incident.severity else 'minor' }}">
+                            {{ incident.severity if incident.severity else 'N/A' }}
+                        </span>
+                    </span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Assigned Officer</span>
+                    <span class="meta-value">{{ incident.assigned_officer.name if incident.assigned_officer else 'Not yet assigned' }}</span>
+                </div>
             </div>
 
             {% if incident.investigation_notes %}
             <div class="incident-notes">
-                <h4>Investigation Notes:</h4>
-                <p>{{ incident.investigation_notes }}</p>
+                <div class="notes-label">Investigation Notes</div>
+                <div class="notes-text">{{ incident.investigation_notes }}</div>
             </div>
             {% endif %}
 
             {% if incident.resolution_notes %}
             <div class="incident-notes">
-                <h4>Resolution Notes:</h4>
-                <p>{{ incident.resolution_notes }}</p>
+                <div class="notes-label">Resolution Notes</div>
+                <div class="notes-text">{{ incident.resolution_notes }}</div>
             </div>
             {% endif %}
         </div>
-    {% endfor %}
-{% else %}
-    <p>You have not reported any incidents yet.</p>
-{% endif %}
+        {% endfor %}
+    {% else %}
+        <div class="empty-state">
+            <p>You have not reported any incidents yet.</p>
+        </div>
+    {% endif %}
 
-<br>
-<a href="{% if session['role'] == 'Lecturer' %}{{ url_for('lecturer_dashboard') }}{% else %}{{ url_for('student_dashboard') }}{% endif %}" class="btn">Back</a>
+    <a href="{% if session['role'] == 'Lecturer' %}{{ url_for('lecturer_dashboard') }}{% else %}{{ url_for('student_dashboard') }}{% endif %}" class="btn btn-back">← Back to Dashboard</a>
 
 </div>
 
+<footer>&copy; 2026 Durban University of Technology</footer>
+
+<script src="{{ url_for('static', filename='js/background.js') }}"></script>
 </body>
 </html>
