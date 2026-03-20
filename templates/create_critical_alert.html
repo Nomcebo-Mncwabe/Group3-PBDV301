@@ -3,6 +3,194 @@
 <head>
     <title>Create Critical Alert</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .page-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e1e1e;
+            margin-bottom: 4px;
+        }
+
+        .page-subtitle {
+            color: #5a5a5a;
+            font-size: 15px;
+            margin-bottom: 28px;
+        }
+
+        .warning-banner {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #fff5f5;
+            border: 1px solid #f5c6cb;
+            border-left: 4px solid #800020;
+            border-radius: 10px;
+            padding: 14px 20px;
+            margin-bottom: 28px;
+            font-size: 14px;
+            color: #800020;
+            font-weight: 600;
+        }
+
+        .alert-form-box {
+            background: #fff;
+            border-radius: 12px;
+            padding: 28px 32px;
+            border: 1px solid #e2e0dd;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+            margin-bottom: 36px;
+        }
+
+        .alert-form-box h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e1e1e;
+            margin: 0 0 20px 0;
+            padding-bottom: 14px;
+            border-bottom: 1px solid #e2e0dd;
+        }
+
+        .alert-form-box h3::after {
+            display: none;
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: #5a5a5a;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            max-width: 100%;
+            padding: 11px 14px;
+            border: 1.5px solid #e2e0dd;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: 'DM Sans', sans-serif;
+            background: #faf9f7;
+            color: #1e1e1e;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
+            box-sizing: border-box;
+            margin: 0;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #800020;
+            box-shadow: 0 0 0 3px rgba(128,0,32,0.1);
+            background: #fff;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 110px;
+            line-height: 1.6;
+        }
+
+        .form-hint {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .section-divider {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: #888;
+            margin: 24px 0 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e2e0dd;
+        }
+
+        .previous-alerts-section h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e1e1e;
+            margin: 0 0 20px 0;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid #e2e0dd;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            margin-bottom: 28px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th {
+            background: #1e1e1e;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 14px 16px;
+            text-align: left;
+            border: none;
+        }
+
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #e2e0dd;
+            vertical-align: middle;
+            color: #1e1e1e;
+            font-size: 14px;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: #faf9f7;
+        }
+
+        .btn-back {
+            background: transparent;
+            border: 2px solid #e2e0dd;
+            color: #5a5a5a;
+            box-shadow: none;
+        }
+
+        .btn-back:hover {
+            border-color: #800020;
+            color: #800020;
+            background: transparent;
+            transform: none;
+            box-shadow: none;
+        }
+
+        @media (max-width: 768px) {
+            .alert-form-box { padding: 24px 20px; }
+            .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+            table { min-width: 500px; }
+            .warning-banner { font-size: 13px; }
+        }
+    </style>
 </head>
 <body>
 
@@ -10,81 +198,97 @@
 
 <div class="container">
 
-<h2>Create Critical Alert</h2>
+    <div class="page-title">Create Critical Alert</div>
+    <p class="page-subtitle">Send a campus-wide critical alert to all students and lecturers.</p>
 
-{% with messages = get_flashed_messages() %}
-    {% if messages %}
-        <div class="flash-message">
-            {% for message in messages %}
-                <p>{{ message }}</p>
-            {% endfor %}
+    <div class="warning-banner">
+        Critical alerts are immediately visible to all students and lecturers on their dashboards. Use with caution.
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="flash-message">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <div class="alert-form-box">
+        <h3>New Alert</h3>
+        <form method="POST">
+            <div class="form-group">
+                <label>Alert Message</label>
+                <textarea name="message" placeholder="Describe the critical situation clearly and concisely..." required></textarea>
+                <div class="form-hint">This message will be displayed to all users on their dashboards.</div>
+            </div>
+
+            <div class="section-divider">Link to Incident (Optional)</div>
+
+            <div class="form-group">
+                <label>Link to Existing Incident</label>
+                <select name="incident_id">
+                    <option value="">None — create standalone alert</option>
+                    {% for incident in incidents %}
+                        <option value="{{ incident.id }}">{{ incident.title }} — {{ incident.location }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Incident Title (if not linking)</label>
+                <input type="text" name="incident_title" placeholder="e.g. Armed robbery near parking lot">
+            </div>
+
+            <div class="form-group">
+                <label>Incident Location (if not linking)</label>
+                <input type="text" name="incident_location" placeholder="e.g. Ritson Campus — Block C">
+            </div>
+
+            <button type="submit" class="btn">Send Critical Alert</button>
+        </form>
+    </div>
+
+    <div class="previous-alerts-section">
+        <h3>Previously Sent Alerts</h3>
+
+        {% if previous_alerts %}
+        <div class="table-wrapper">
+            <table>
+                <tr>
+                    <th>Message</th>
+                    <th>Linked Incident</th>
+                    <th>Sent At</th>
+                </tr>
+                {% for alert in previous_alerts %}
+                <tr>
+                    <td>{{ alert.message }}</td>
+                    <td>
+                        {% if alert.incident %}
+                            {{ alert.incident.title }} — {{ alert.incident.location }}
+                        {% elif alert.incident_title %}
+                            {{ alert.incident_title }} — {{ alert.incident_location }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
+                    <td>{{ alert.timestamp.strftime("%d %b %Y, %H:%M") }}</td>
+                </tr>
+                {% endfor %}
+            </table>
         </div>
-    {% endif %}
-{% endwith %}
-
-<form method="POST">
-    <div class="form-group">
-        <label>Message</label>
-        <textarea name="message" placeholder="Enter critical alert message" required></textarea>
+        {% else %}
+            <p style="color:#888; font-size:14px;">No critical alerts have been sent yet.</p>
+        {% endif %}
     </div>
 
-    <div class="form-group">
-        <label>Link to Existing Incident (optional)</label>
-        <select name="incident_id">
-            <option value="">None</option>
-            {% for incident in incidents %}
-                <option value="{{ incident.id }}">{{ incident.title }} - {{ incident.location }}</option>
-            {% endfor %}
-        </select>
-    </div>
-
-    <div class="form-group">
-        <label>Incident Title (if not linking to existing incident)</label>
-        <input type="text" name="incident_title" placeholder="Enter incident title">
-    </div>
-
-    <div class="form-group">
-        <label>Incident Location (if not linking to existing incident)</label>
-        <input type="text" name="incident_location" placeholder="Enter incident location">
-    </div>
-
-    <button type="submit">Create Alert</button>
-</form>
-
-<br><hr>
-
-<h3>Previously Created Critical Alerts</h3>
-
-{% if previous_alerts %}
-    <table>
-        <tr>
-            <th>Message</th>
-            <th>Incident</th>
-            <th>Created At</th>
-        </tr>
-        {% for alert in previous_alerts %}
-        <tr>
-            <td>{{ alert.message }}</td>
-            <td>
-                {% if alert.incident %}
-                    {{ alert.incident.title }} - {{ alert.incident.location }}
-                {% elif alert.incident_title %}
-                    {{ alert.incident_title }} - {{ alert.incident_location }}
-                {% else %}
-                    N/A
-                {% endif %}
-            </td>
-            <td>{{ alert.timestamp.strftime("%Y-%m-%d %H:%M:%S") }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-{% else %}
-    <p>No critical alerts created yet.</p>
-{% endif %}
-
-<br>
-<a href="{{ url_for('head_dashboard') }}" class="btn">Back to Dashboard</a>
+    <a href="{{ url_for('head_dashboard') }}" class="btn btn-back">← Back to Dashboard</a>
 
 </div>
+
+<footer>&copy; 2026 Durban University of Technology</footer>
+
+<script src="{{ url_for('static', filename='js/background.js') }}"></script>
 </body>
 </html>

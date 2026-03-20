@@ -3,50 +3,270 @@
 <head>
     <title>Investigate Incident</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
+    <style>
+        .page-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e1e1e;
+            margin-bottom: 4px;
+        }
 
+        .page-subtitle {
+            color: #5a5a5a;
+            font-size: 15px;
+            margin-bottom: 28px;
+        }
+
+        .incident-summary {
+            background: #1e1e1e;
+            border-radius: 12px;
+            padding: 24px 28px;
+            margin-bottom: 28px;
+            color: #fff;
+        }
+
+        .incident-summary-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #fff;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+        }
+
+        .summary-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .summary-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .summary-value {
+            font-size: 14px;
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .status-pending { background: #fff3e0; color: #e67e00; }
+        .status-in-progress { background: #fff8e1; color: #c9a800; }
+        .status-resolved { background: #e8f5e9; color: #1e7e34; }
+
+        .description-box {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .description-box .summary-label {
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .description-box p {
+            font-size: 14px;
+            color: rgba(255,255,255,0.8);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .investigation-form {
+            background: #fff;
+            border-radius: 12px;
+            padding: 28px 32px;
+            border: 1px solid #e2e0dd;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+        }
+
+        .investigation-form h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e1e1e;
+            margin: 0 0 20px 0;
+            padding-bottom: 14px;
+            border-bottom: 1px solid #e2e0dd;
+        }
+
+        .investigation-form h3::after {
+            display: none;
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: #5a5a5a;
+            margin-bottom: 8px;
+        }
+
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            max-width: 100%;
+            padding: 11px 14px;
+            border: 1.5px solid #e2e0dd;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: 'DM Sans', sans-serif;
+            background: #faf9f7;
+            color: #1e1e1e;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
+            box-sizing: border-box;
+            margin: 0;
+        }
+
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: #800020;
+            box-shadow: 0 0 0 3px rgba(128,0,32,0.1);
+            background: #fff;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+            line-height: 1.6;
+        }
+
+        .form-hint {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            padding-top: 8px;
+        }
+
+        .btn-back {
+            background: transparent;
+            border: 2px solid #e2e0dd;
+            color: #5a5a5a;
+            box-shadow: none;
+        }
+
+        .btn-back:hover {
+            border-color: #800020;
+            color: #800020;
+            background: transparent;
+            transform: none;
+            box-shadow: none;
+        }
+
+        @media (max-width: 768px) {
+            .summary-grid { grid-template-columns: 1fr 1fr; }
+            .investigation-form { padding: 24px 20px; }
+            .form-actions { flex-direction: column; }
+            .form-actions .btn { width: 100%; text-align: center; }
+        }
+
+        @media (max-width: 480px) {
+            .summary-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
 <body>
 
 <header>DUT SafeAlert - Investigate Incident</header>
 
 <div class="container">
 
-<h2>Investigate Incident</h2>
+    <div class="page-title">Investigate Incident</div>
+    <p class="page-subtitle">Review the incident details and update your investigation progress below.</p>
 
-<p><strong>Title:</strong> {{ incident.title }}</p>
-<p><strong>Description:</strong> {{ incident.description }}</p>
-<p><strong>Campus:</strong> {{ incident.location }}</p>
-<p><strong>Status:</strong> {{ incident.status }}</p>
+    <!-- Incident Summary -->
+    <div class="incident-summary">
+        <div class="incident-summary-title">{{ incident.title }}</div>
+        <div class="summary-grid">
+            <div class="summary-item">
+                <span class="summary-label">Campus</span>
+                <span class="summary-value">{{ incident.location }}</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-label">Status</span>
+                <span class="summary-value">
+                    <span class="status-badge status-{{ incident.status|lower|replace(' ','-') if incident.status else 'pending' }}">
+                        {{ incident.status if incident.status else 'Pending' }}
+                    </span>
+                </span>
+            </div>
+        </div>
+        <div class="description-box">
+            <span class="summary-label">Description</span>
+            <p>{{ incident.description }}</p>
+        </div>
+    </div>
 
-<form method="POST">
+    <!-- Investigation Form -->
+    <div class="investigation-form">
+        <h3>Investigation Update</h3>
+        <form method="POST">
 
-<div class="form-group">
-    <label>Investigation Notes</label>
-    <textarea name="investigation_notes" rows="5">{{ incident.investigation_notes or '' }}</textarea>
+            <div class="form-group">
+                <label>Investigation Notes</label>
+                <textarea name="investigation_notes" rows="5" placeholder="What actions are being taken? e.g. Reviewing CCTV footage, interviewing witnesses...">{{ incident.investigation_notes or '' }}</textarea>
+                <div class="form-hint">Describe what is currently happening in the investigation.</div>
+            </div>
+
+            <div class="form-group">
+                <label>Resolution Notes</label>
+                <textarea name="resolution_notes" rows="5" placeholder="How was the incident resolved? e.g. Suspect identified and reported to authorities...">{{ incident.resolution_notes or '' }}</textarea>
+                <div class="form-hint">Fill this in once the incident has been resolved.</div>
+            </div>
+
+            <div class="form-group">
+                <label>Update Status</label>
+                <select name="status">
+                    <option value="Pending" {% if incident.status == 'Pending' %}selected{% endif %}>Pending</option>
+                    <option value="In Progress" {% if incident.status == 'In Progress' %}selected{% endif %}>In Progress</option>
+                    <option value="Resolved" {% if incident.status == 'Resolved' %}selected{% endif %}>Resolved</option>
+                </select>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn">Save Investigation Update</button>
+                <a href="{{ url_for('officer_view_incidents') }}" class="btn btn-back">← Back</a>
+            </div>
+
+        </form>
+    </div>
+
 </div>
 
-<div class="form-group">
-    <label>Resolution Notes</label>
-    <textarea name="resolution_notes" rows="5">{{ incident.resolution_notes or '' }}</textarea>
-</div>
+<footer>&copy; 2026 Durban University of Technology</footer>
 
-<div class="form-group">
-    <label>Status</label>
-    <select name="status">
-        <option value="Pending" {% if incident.status == 'Pending' %}selected{% endif %}>Pending</option>
-        <option value="In Progress" {% if incident.status == 'In Progress' %}selected{% endif %}>In Progress</option>
-        <option value="Resolved" {% if incident.status == 'Resolved' %}selected{% endif %}>Resolved</option>
-    </select>
-</div>
-
-<button type="submit">Save Investigation Update</button>
-</form>
-
-<br>
-
-<a href="{{ url_for('officer_view_incidents') }}" class="btn">Back</a>
-
-</div>
-
+<script src="{{ url_for('static', filename='js/background.js') }}"></script>
 </body>
 </html>

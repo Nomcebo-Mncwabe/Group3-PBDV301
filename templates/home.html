@@ -3,33 +3,164 @@
 <head>
     <title>DUT SafeAlert</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 6px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.25);
+            margin-bottom: 24px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 36px;
+        }
+
+        .btn-hero-primary {
+            background: #fff;
+            color: #800020;
+            font-weight: 700;
+            padding: 14px 34px;
+            border-radius: 8px;
+            font-size: 15px;
+            border: 2px solid #fff;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+            transition: all 0.25s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .btn-hero-primary:hover {
+            background: transparent;
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        .btn-hero-secondary {
+            background: transparent;
+            color: #fff;
+            font-weight: 600;
+            padding: 14px 34px;
+            border-radius: 8px;
+            font-size: 15px;
+            border: 2px solid rgba(255,255,255,0.6);
+            transition: all 0.25s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .btn-hero-secondary:hover {
+            background: rgba(255,255,255,0.15);
+            border-color: #fff;
+            transform: translateY(-2px);
+        }
+
+        .campus-section {
+            margin-top: 10px;
+        }
+
+        .campus-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #888;
+            margin-bottom: 6px;
+        }
+
+        .campus-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2B2B2B;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .facts-section {
+            background: #1e1e1e;
+            color: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            margin-top: 32px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            text-align: center;
+        }
+
+        .fact-item h3 {
+            font-size: 36px;
+            color: #800020;
+            margin: 0 0 8px 0;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .fact-item p {
+            font-size: 14px;
+            opacity: 0.75;
+            margin: 0;
+        }
+    </style>
 </head>
 <body>
     <header>DUT SafeAlert</header>
 
     <div class="hero">
+        <div class="hero-badge">Durban University of Technology</div>
         <h1>Welcome to DUT SafeAlert</h1>
         <p>Your one-stop platform to report incidents and keep our campuses safe. Stay informed, stay secure, and help us maintain a safe learning environment.</p>
-        <div style="margin-top:30px;">
-            <a href="{{ url_for('select_role') }}" class="btn">Login</a>
-            <a href="{{ url_for('register') }}" class="btn">Register</a>
+        <div class="hero-actions">
+            <a href="{{ url_for('select_role') }}" class="btn-hero-primary">Login</a>
+            <a href="{{ url_for('register') }}" class="btn-hero-secondary">Register</a>
         </div>
     </div>
 
-    <div class="container">
-        <h2>Our Campuses</h2>
-        <div class="hero-images">
+<div class="container">
+    <h2>Our Campuses</h2>
+    <p style="color:#5a5a5a; margin-top:4px; margin-bottom:28px;">SafeAlert covers all three DUT campuses across Durban.</p>
+
+    <div class="hero-images">
+        <div>
             <img src="{{ url_for('static', filename='images/ritson.jpg') }}" alt="Ritson Campus">
-            <img src="{{ url_for('static', filename='images/steve_biko.jpg') }}" alt="Steve Biko Campus">
-            <img src="{{ url_for('static', filename='images/ml_sultan.jpg') }}" alt="ML Sultan Campus">
+            <p class="campus-name">Ritson Campus</p>
         </div>
-
-        <div style="margin-top: 20px;">
-            <p><strong>Fun Fact:</strong> DUT has over 30,000 students and multiple campuses dedicated to innovation and technology!</p>
-            <p><strong>Fun Fact:</strong> Students can now report incidents instantly via SafeAlert.</p>
+        <div>
+            <img src="{{ url_for('static', filename='images/steve_biko.jpg') }}" alt="Steve Biko Campus">
+            <p class="campus-name">Steve Biko Campus</p>
+        </div>
+        <div>
+            <img src="{{ url_for('static', filename='images/ml_sultan.jpg') }}" alt="ML Sultan Campus">
+            <p class="campus-name">ML Sultan Campus</p>
         </div>
     </div>
+
+    <div class="facts-section">
+        <div class="fact-item">
+            <h3>30,000+</h3>
+            <p>Students across all campuses</p>
+        </div>
+        <div class="fact-item">
+            <h3>3</h3>
+            <p>Campuses covered by SafeAlert</p>
+        </div>
+        <div class="fact-item">
+            <h3>24/7</h3>
+            <p>Incident reporting available</p>
+        </div>
+    </div>
+</div>
 
     <footer>&copy; 2026 Durban University of Technology</footer>
+<script src="{{ url_for('static', filename='js/background.js') }}"></script>
 </body>
 </html>

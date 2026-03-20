@@ -3,11 +3,108 @@
 <head>
     <title>Register</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .register-section {
+            max-width: 520px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+
+        .register-section h2 {
+            font-size: 30px;
+            margin-bottom: 6px;
+        }
+
+        .register-section .subtitle {
+            color: #5a5a5a;
+            font-size: 15px;
+            margin-bottom: 32px;
+        }
+
+        .register-box {
+            background: #fff;
+            border-radius: 12px;
+            padding: 36px 40px;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.1);
+            border: 1px solid #e2e0dd;
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: #5a5a5a;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            max-width: 100%;
+            padding: 12px 14px;
+            border: 1.5px solid #e2e0dd;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: 'DM Sans', sans-serif;
+            background: #faf9f7;
+            color: #1e1e1e;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
+            box-sizing: border-box;
+            margin: 0;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #800020;
+            box-shadow: 0 0 0 3px rgba(128,0,32,0.1);
+            background: #fff;
+        }
+
+        .register-submit {
+            width: 100%;
+            padding: 13px;
+            font-size: 16px;
+            border-radius: 8px;
+            margin-top: 4px;
+            text-align: center;
+        }
+
+        .register-links {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .register-links a {
+            color: #800020;
+            font-size: 14px;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+
+        .register-links a:hover {
+            opacity: 0.75;
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
     <header>DUT SafeAlert - Register</header>
 
-    <div class="container">
+    <div class="register-section">
+
+        <h2>Create an Account</h2>
+        <p class="subtitle">Register to access the DUT SafeAlert system.</p>
+
         {% with messages = get_flashed_messages() %}
           {% if messages %}
             {% for message in messages %}
@@ -16,40 +113,44 @@
           {% endif %}
         {% endwith %}
 
-        <h2>Create an Account</h2>
-
-        <form method="POST">
-            <div class="form-group">
-                <label>Username</label>
-                <input type="text" name="username" placeholder="Enter your username" required>
-            </div>
-            <div class="form-group">
-                <label>Email</label>
-                <input type="email" name="email" placeholder="Enter your email" required>
-            </div>
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" name="password" placeholder="Enter your password" required>
-            </div>
-            <div class="form-group">
-                <label>Role</label>
-                <select name="role" required>
-                    <option value="">--Select Role--</option>
-                    <option value="Student">Student</option>
-                    <option value="Lecturer">Lecturer</option>
-                    <option value="Security Officer">Security Officer</option>
-                    <option value="Head of Security">Head of Security</option>
-                </select>
-            </div>
-            <input type="submit" value="Register" class="btn">
-        </form>
-
-        <div style="margin-top:20px; text-align:center;">
-            <a href="{{ url_for('home') }}" class="btn">Back to Home</a>
-            <a href="{{ url_for('select_role') }}" class="btn">Already have an account? Login</a>
+        <div class="register-box">
+            <form method="POST">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" name="username" placeholder="Enter your username" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" name="password" placeholder="Enter your password" required>
+                </div>
+                <div class="form-group">
+                    <label>Role</label>
+                    <select name="role" required>
+                        <option value="">-- Select Role --</option>
+                        <option value="Student">Student</option>
+                        <option value="Lecturer">Lecturer</option>
+                        {# Security Officer and Head of Security accounts are created by the Head of Security only
+                        <option value="Security Officer">Security Officer</option>
+                        <option value="Head of Security">Head of Security</option>
+                        #}
+                    </select>
+                </div>
+                <input type="submit" value="Register" class="btn register-submit">
+            </form>
         </div>
+
+        <div class="register-links">
+            <a href="{{ url_for('home') }}">← Back to Home</a>
+            <a href="{{ url_for('select_role') }}">Already have an account? Login</a>
+        </div>
+
     </div>
 
     <footer>&copy; 2026 Durban University of Technology</footer>
+<script src="{{ url_for('static', filename='js/background.js') }}"></script>
 </body>
 </html>
