@@ -1,49 +1,3 @@
-<!--<!DOCTYPE html>
-<html>
-<head>
-    <title>Head Dashboard</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
-    <header>DUT SafeAlert - Head of Security Dashboard</header>
-
-    <div class="container">
-        <h2>Welcome {{ session['username'] }}!</h2>
-        <p>Monitor all incidents and officers across campuses.</p>
-
-        <-- CRITICAL ALERTS BUTTON ->
-        <div style="margin-bottom:20px;">
-            <a href="{{ url_for('create_critical_alert') }}" class="btn btn-warning">
-                <i class="fa fa-exclamation-circle"></i> Critical Alerts
-            </a>
-        </div>
-
-        <div class="dashboard-cards">
-            <div class="card">
-                <h3>View All Incidents</h3>
-                <p>Monitor pending, ongoing, and resolved incidents.</p>
-                <a href="{{ url_for('manage_incidents') }}" class="btn">View All Incidents & Assign Officers</a>
-            </div>
-            <div class="card">
-                <h3>Manage Officers</h3>
-                <p>Create, edit, and assign security personnel.</p>
-                <a href="{{ url_for('manage_officers') }}" class="btn">Manage Officers</a>
-            </div>
-            <div class="card">
-                <h3>Generate Reports</h3>
-                <p>Analyze incident trends and campus safety stats.</p>
-                <a href="{{ url_for('generate_report') }}" class="btn">Analyze Trends</a>
-            </div>
-        </div>
-
-        <div style="margin-top:30px;">
-            <a href="{{ url_for('home') }}"><button>Logout</button></a>
-        </div>
-    </div>
-
-    <footer>&copy; 2026 Durban University of Technology</footer>
-</body>
-</html>-->
 <!DOCTYPE html>
 <html>
 <head>
@@ -185,5 +139,6 @@
     </div>
 
     <footer>&copy; 2026 Durban University of Technology</footer>
+<script src="{{ url_for('static', filename='js/background.js') }}"></script>
 </body>
 </html>
