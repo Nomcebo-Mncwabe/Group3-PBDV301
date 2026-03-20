@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html>
 <head>
     <title>Head Dashboard</title>
@@ -11,7 +11,7 @@
         <h2>Welcome {{ session['username'] }}!</h2>
         <p>Monitor all incidents and officers across campuses.</p>
 
-        <!-- CRITICAL ALERTS BUTTON -->
+        <-- CRITICAL ALERTS BUTTON ->
         <div style="margin-bottom:20px;">
             <a href="{{ url_for('create_critical_alert') }}" class="btn btn-warning">
                 <i class="fa fa-exclamation-circle"></i> Critical Alerts
@@ -39,6 +39,149 @@
         <div style="margin-top:30px;">
             <a href="{{ url_for('home') }}"><button>Logout</button></a>
         </div>
+    </div>
+
+    <footer>&copy; 2026 Durban University of Technology</footer>
+</body>
+</html>-->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Head Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .welcome-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e1e1e;
+        }
+
+        .welcome-subtitle {
+            color: #5a5a5a;
+            font-size: 15px;
+            margin-bottom: 28px;
+            margin-top: 4px;
+        }
+
+        .action-banner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #1e1e1e;
+            border-radius: 10px;
+            padding: 14px 20px;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .action-banner-text {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            color: #fff;
+            font-size: 15px;
+        }
+
+        .action-banner-text span {
+            font-weight: 400;
+            color: rgba(255,255,255,0.6);
+            font-size: 14px;
+        }
+
+        .action-banner-link {
+            background: #800020;
+            color: #fff;
+            padding: 8px 18px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+
+        .action-banner-link:hover {
+            background: #5a0016;
+        }
+
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .logout-section {
+            margin-top: 36px;
+            padding-top: 24px;
+            border-top: 1px solid #e2e0dd;
+        }
+
+        .logout-btn {
+            background: transparent;
+            border: 2px solid #e2e0dd;
+            color: #5a5a5a;
+            font-size: 14px;
+            padding: 10px 22px;
+            box-shadow: none;
+        }
+
+        .logout-btn:hover {
+            border-color: #800020;
+            color: #800020;
+            background: transparent;
+            transform: none;
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+    <header>DUT SafeAlert - Head of Security Dashboard</header>
+
+    <div class="container">
+
+        <div class="welcome-title">Welcome, {{ session['username'] }}!</div>
+        <p class="welcome-subtitle">Monitor all incidents and manage security personnel across all campuses.</p>
+
+        <!-- CRITICAL ALERTS ACTION BANNER -->
+        <div class="action-banner">
+            <div class="action-banner-text">
+                Critical Alerts
+                <span>Send a campus-wide critical alert to all users</span>
+            </div>
+            <a href="{{ url_for('create_critical_alert') }}" class="action-banner-link">Create Alert</a>
+        </div>
+
+        <div class="dashboard-cards">
+            <div class="card">
+                <h3>View All Incidents</h3>
+                <p>Monitor pending, ongoing, and resolved incidents across all campuses.</p>
+                <a href="{{ url_for('manage_incidents') }}" class="btn">View & Assign Officers</a>
+            </div>
+            <div class="card">
+                <h3>Manage Officers</h3>
+                <p>Create, edit, and manage security personnel accounts.</p>
+                <a href="{{ url_for('manage_officers') }}" class="btn">Manage Officers</a>
+            </div>
+            <div class="card">
+                <h3>Generate Reports</h3>
+                <p>Analyze incident trends and campus safety statistics.</p>
+                <a href="{{ url_for('generate_report') }}" class="btn">Analyze Trends</a>
+            </div>
+        </div>
+
+        <div class="logout-section">
+            <a href="{{ url_for('home') }}" class="btn logout-btn">Logout</a>
+        </div>
+
     </div>
 
     <footer>&copy; 2026 Durban University of Technology</footer>

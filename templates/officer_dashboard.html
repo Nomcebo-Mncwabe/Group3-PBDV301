@@ -3,14 +3,78 @@
 <head>
     <title>Officer Dashboard</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .welcome-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e1e1e;
+        }
+
+        .welcome-subtitle {
+            color: #5a5a5a;
+            font-size: 15px;
+            margin-bottom: 28px;
+            margin-top: 4px;
+        }
+
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-top: 8px;
+        }
+
+        @media (max-width: 600px) {
+            .dashboard-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .logout-section {
+            margin-top: 36px;
+            padding-top: 24px;
+            border-top: 1px solid #e2e0dd;
+        }
+
+        .logout-btn {
+            background: transparent;
+            border: 2px solid #e2e0dd;
+            color: #5a5a5a;
+            font-size: 14px;
+            padding: 10px 22px;
+            box-shadow: none;
+        }
+
+        .logout-btn:hover {
+            border-color: #800020;
+            color: #800020;
+            background: transparent;
+            transform: none;
+            box-shadow: none;
+        }
+    </style>
 </head>
 <body>
     <header>DUT SafeAlert - Security Officer Dashboard</header>
 
-
     <div class="container">
-        <h2>Welcome {{ session['username'] }}!</h2>
-        <p>Manage incidents and issue alerts to campus users.</p>
+
+        <div class="dashboard-header">
+            <div>
+                <div class="welcome-title">Welcome, {{ session['username'] }}!</div>
+                <p class="welcome-subtitle">Manage your assigned incidents and record your attendance below.</p>
+            </div>
+        </div>
 
         {% with messages = get_flashed_messages() %}
             {% if messages %}
@@ -24,20 +88,21 @@
 
         <div class="dashboard-cards">
             <div class="card">
-                <h3>View Incidents & Assigned Taks</h3>
+                <h3>View Incidents & Assigned Tasks</h3>
                 <p>Access a complete list of all reported incidents, including pending and ongoing cases.</p>
-                <a href="{{ url_for('officer_view_incidents') }}"><button>View Incidents</button></a>
+                <a href="{{ url_for('officer_view_incidents') }}" class="btn">View Incidents</a>
             </div>
             <div class="card">
                 <h3>Sign In & Sign Out</h3>
-                <p>Record personnel attendance and notify relevant parties about safety updates.</p>
+                <p>Record your attendance and update your duty status for the campus.</p>
                 <a href="{{ url_for('attendance') }}" class="btn">Sign In & Sign Out</a>
             </div>
         </div>
 
-        <div style="margin-top:30px;">
-            <a href="{{ url_for('home') }}"><button>Logout</button></a>
+        <div class="logout-section">
+            <a href="{{ url_for('home') }}" class="btn logout-btn">Logout</a>
         </div>
+
     </div>
 
     <footer>&copy; 2026 Durban University of Technology</footer>
