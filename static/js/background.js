@@ -33,7 +33,7 @@
         }
 
         .container, .report-wrapper, .login-section,
-        .register-section, .role-section {
+        .register-section, .role-section, .attendance-wrapper {
             position: relative;
             z-index: 1;
         }
