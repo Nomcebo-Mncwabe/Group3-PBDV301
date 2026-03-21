@@ -96,6 +96,7 @@ def login():
 
         session['username'] = user.username
         session['role'] = user.role
+        session['user_id'] = user.id # Store user ID for later use  
 
         # Ensure SecurityPersonnel record exists for Security Officer
         if role == "Security Officer":
