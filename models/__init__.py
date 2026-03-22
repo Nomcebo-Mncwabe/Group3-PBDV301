@@ -69,6 +69,8 @@ class Alert(db.Model):
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     incident_id = db.Column(db.Integer, db.ForeignKey('incidents.id'), nullable=True)
     recipient_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
+    incident_title = db.Column(db.String(200), nullable=True)
+    incident_location = db.Column(db.String(200), nullable=True)
 
     # Relationship to access incident details from an alert
     incident = db.relationship('Incident', backref='alerts', lazy=True)
