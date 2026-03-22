@@ -1,46 +1,59 @@
+<!-- REPLACE YOUR WHOLE FILE WITH THIS -->
+
 <!DOCTYPE html>
 <html>
 <head>
     <title>Incident Management - Head of Security</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .page-title { font-family:'Playfair Display'; font-size:28px; font-weight:700; }
+        .page-subtitle { color:#5a5a5a; margin-bottom:20px; }
+
+        table { width:100%; border-collapse:collapse; }
+        th { background:#1e1e1e; color:white; padding:12px; }
+        td { padding:12px; border-bottom:1px solid #ddd; }
+
+        .severity-badge { padding:4px 10px; border-radius:20px; font-size:11px; }
+        .severity-critical { background:#800020; color:white; }
+
+        .status-badge { padding:4px 10px; border-radius:20px; font-size:11px; }
+
+        .assigned-badge { background:#e8f5e9; padding:5px 10px; border-radius:20px; }
+
+        .table-wrapper { overflow-x:auto; }
+    </style>
 </head>
+
 <body>
 
-        <header>DUT SafeAlert - Incident Management</header>
+<header>DUT SafeAlert - Incident Management</header>
 
-        <div class="container">
+<div class="container">
 
-        <h2>All Reported Incidents</h2>
+<div class="page-title">All Reported Incidents</div>
+<p class="page-subtitle">Manage incidents</p>
 
-        <!-- Flash messages -->
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                <div class="flash-message">
-                    {% for category, message in messages %}
-                        <p class="{{ category }}">{{ message }}</p>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        {% endwith %}
+<div class="table-wrapper">
+<table>
 
-        <table border="1" width="100%">
-            <tr>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Location</th>
-                <th>Reported By</th>
-                <th>Severity</th>
-                <th>Status</th>
-                <th>Assigned Officer</th>
-                <th>Officers On Duty</th>
-            </tr>
+<tr>
+<th>Title</th>
+<th>Location</th>
+<th>Reporter</th>
+<th>Severity</th>
+<th>Status</th>
+<th>Officer</th>
+<th>Assign</th>
+</tr>
 
-            {% for incident in incidents %}
+{% for incident in incidents %}
+<tr>
 
-            <tr>
+<td>
+<strong>{{ incident.title }}</strong><br>
+<small>{{ incident.description }}</small>
+</td>
 
-<td>{{ incident.title }}</td>
-<td>{{ incident.description }}</td>
 <td>{{ incident.location }}</td>
 
 <td>
@@ -52,83 +65,55 @@ Anonymous
 </td>
 
 <td>
-
 <form method="POST" action="{{ url_for('update_incident_severity', incident_id=incident.id) }}">
-
 <select name="severity">
-
-<option value="Minor" {% if incident.severity=="Minor" %}selected{% endif %}>Minor</option>
-
-<option value="Moderate" {% if incident.severity=="Moderate" %}selected{% endif %}>Moderate</option>
-
-<option value="Severe" {% if incident.severity=="Severe" %}selected{% endif %}>Severe</option>
-
-<option value="Critical" {% if incident.severity=="Critical" %}selected{% endif %}>Critical</option>
-
+<option value="Minor">Minor</option>
+<option value="Moderate">Moderate</option>
+<option value="Severe">Severe</option>
+<option value="Critical">Critical</option>
 </select>
-
 <button type="submit">Update</button>
-
 </form>
-
 </td>
 
-<td>{{ incident.status }}</td>
-
 <td>
-
-{% if incident.assigned_officer %}
-
-{{ incident.assigned_officer.name }}
-
-{% else %}
-
-Not Assigned
-
-{% endif %}
-
-</td>
-<td>
-
-{% if incident.assigned_officer %}
-
-<span style="color:white; background-color:green; padding:6px 10px; border-radius:5px;">
-Assigned
+<span class="status-badge">
+{{ incident.status if incident.status else 'Pending' }}
 </span>
-
-{% else %}
-
-<form action="{{ url_for('assign_officer', incident_id=incident.id) }}" method="POST">
-<select name="officer_id">
-
-{% for officer in officers %}
-
-<option value="{{ officer.officer.id }}">
-{{ officer.officer.name }} ({{ officer.officer.status }})
-</option>
-
-{% endfor %}
-
-</select>
-
-<button type="submit">Assign</button>
-
-</form>
-
-{% endif %}
-
 </td>
-</tr>
 
+<td>
+{% if incident.assigned_officer %}
+{{ incident.assigned_officer.name }}
+{% else %}
+Not Assigned
+{% endif %}
+</td>
+
+<td>
+{% if incident.assigned_officer %}
+<span class="assigned-badge">Assigned</span>
+{% else %}
+<form method="POST" action="{{ url_for('assign_officer', incident_id=incident.id) }}">
+<select name="officer_id">
+{% for officer in officers %}
+<option value="{{ officer.officer.id }}">
+{{ officer.officer.name }}
+</option>
+{% endfor %}
+</select>
+<button type="submit">Assign</button>
+</form>
+{% endif %}
+</td>
+
+</tr>
 {% endfor %}
 
 </table>
+</div>
 
-<br>
-
-<a href="{{ url_for('head_dashboard') }}">
-<button>Back to Dashboard</button>
-</a>
+<a href="{{ url_for('head_dashboard') }}" class="btn">Back</a>
 
 </div>
 

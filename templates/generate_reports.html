@@ -3,176 +3,199 @@
 <head>
     <title>Incident Reports</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-
     <style>
-
-        .charts-grid{
-            display:grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px,1fr));
-            gap:25px;
-            margin-top:30px;
+        .page-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e1e1e;
+            margin-bottom: 4px;
         }
 
-        .chart-container{
-            background:#f9f9f9;
-            padding:20px;
-            border-radius:10px;
-            box-shadow:0 4px 8px rgba(0,0,0,0.1);
-            text-align:center;
+        .page-subtitle {
+            color: #5a5a5a;
+            font-size: 15px;
+            margin-bottom: 32px;
         }
 
-        canvas{
-            width:100% !important;
-            height:280px !important;
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-bottom: 32px;
         }
 
-        header{
-            background:#222;
-            color:white;
-            padding:15px;
-            text-align:center;
-            font-size:20px;
+        @media (max-width: 768px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
-        .container{
-            width:90%;
-            margin:auto;
+        .chart-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid #e2e0dd;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.07);
         }
 
-        h2{
-            text-align:center;
+        .chart-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: #1e1e1e;
+            margin: 0 0 20px 0;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e2e0dd;
         }
 
+        .chart-card h3::after {
+            display: none;
+        }
+
+        canvas {
+            width: 100% !important;
+            max-height: 260px;
+        }
+
+        .btn-back {
+            background: transparent;
+            border: 2px solid #e2e0dd;
+            color: #5a5a5a;
+            box-shadow: none;
+        }
+
+        .btn-back:hover {
+            border-color: #800020;
+            color: #800020;
+            background: transparent;
+            transform: none;
+            box-shadow: none;
+        }
+
+        @media (max-width: 768px) {
+            .charts-grid { grid-template-columns: 1fr; }
+            .chart-card { padding: 18px; }
+            canvas { max-height: 220px; }
+        }
     </style>
 </head>
-
 <body>
 
 <header>DUT SafeAlert - Incident Reports</header>
 
 <div class="container">
 
-<h2>Incident Trends Dashboard</h2>
+    <div class="page-title">Incident Trends Dashboard</div>
+    <p class="page-subtitle">Analyze incident patterns across all campuses to identify safety hotspots and trends.</p>
 
-<div class="charts-grid">
+    <div class="charts-grid">
 
-    <div class="chart-container">
-        <h3>Incidents by Campus</h3>
-        <canvas id="campusChart"></canvas>
+        <div class="chart-card">
+            <h3>Incidents by Campus</h3>
+            <canvas id="campusChart"></canvas>
+        </div>
+
+        <div class="chart-card">
+            <h3>Incidents by Category</h3>
+            <canvas id="categoryChart"></canvas>
+        </div>
+
+        <div class="chart-card">
+            <h3>Incidents by Severity</h3>
+            <canvas id="severityChart"></canvas>
+        </div>
+
+        <div class="chart-card">
+            <h3>Incidents by Status</h3>
+            <canvas id="statusChart"></canvas>
+        </div>
+
     </div>
 
-    <div class="chart-container">
-        <h3>Incidents by Category</h3>
-        <canvas id="categoryChart"></canvas>
-    </div>
-
-    <div class="chart-container">
-        <h3>Incidents by Severity</h3>
-        <canvas id="severityChart"></canvas>
-    </div>
-
-    <div class="chart-container">
-        <h3>Incidents by Status</h3>
-        <canvas id="statusChart"></canvas>
-    </div>
+    <a href="{{ url_for('head_dashboard') }}" class="btn btn-back">← Back to Dashboard</a>
 
 </div>
 
-<div style="margin-top:30px;text-align:center;">
-    <a href="{{ url_for('head_dashboard') }}">
-        <button>Back to Dashboard</button>
-    </a>
-</div>
-
-</div>
-
+<footer>&copy; 2026 Durban University of Technology</footer>
 
 <script>
-
 const campusCtx = document.getElementById('campusChart');
-
-new Chart(campusCtx,{
-    type:'bar',
-    data:{
+new Chart(campusCtx, {
+    type: 'bar',
+    data: {
         labels: {{ campus_counts.keys()|list|tojson }},
-        datasets:[{
-            label:'Incidents',
+        datasets: [{
+            label: 'Incidents',
             data: {{ campus_counts.values()|list|tojson }},
-            backgroundColor:'rgba(54,162,235,0.6)'
-        }]
-    }
-});
-
-
-const categoryCtx = document.getElementById('categoryChart');
-
-new Chart(categoryCtx,{
-    type:'pie',
-    data:{
-        labels: {{ category_counts.keys()|list|tojson }},
-        datasets:[{
-            data: {{ category_counts.values()|list|tojson }},
-            backgroundColor:[
-                '#ff6384',
-                '#36a2eb',
-                '#ffce56',
-                '#4bc0c0',
-                '#9966ff'
-            ]
-        }]
-    }
-});
-
-
-const severityCtx = document.getElementById('severityChart');
-
-new Chart(severityCtx,{
-    type:'doughnut',
-    data:{
-        labels: {{ severity_counts.keys()|list|tojson }},
-        datasets:[{
-            data: {{ severity_counts.values()|list|tojson }},
-            backgroundColor:[
-                '#ff4d4d',
-                '#ff944d',
-                '#ffd11a',
-                '#4dff88'
-            ]
-        }]
-    }
-});
-
-    const statusCtx = document.getElementById('statusChart');
-
-new Chart(statusCtx,{
-    type:'doughnut',
-    data:{
-        labels:["Pending","In Progress","Resolved"],
-        datasets:[{
-            data:[
-                {{ status_counts["Pending"] }},
-                {{ status_counts["In Progress"] }},
-                {{ status_counts["Resolved"] }}
-            ],
-            backgroundColor:[
-                '#ffcc00',  // Pending
-                '#3399ff',  // In Progress
-                '#33cc66'   // Resolved
-            ]
+            backgroundColor: '#800020',
+            borderRadius: 6,
         }]
     },
-    options:{
-        plugins:{
-            legend:{
-                position:'bottom'
-            }
+    options: {
+        plugins: { legend: { display: false } },
+        scales: {
+            y: { beginAtZero: true, grid: { color: '#f0eeeb' } },
+            x: { grid: { display: false } }
         }
     }
 });
 
+const categoryCtx = document.getElementById('categoryChart');
+new Chart(categoryCtx, {
+    type: 'pie',
+    data: {
+        labels: {{ category_counts.keys()|list|tojson }},
+        datasets: [{
+            data: {{ category_counts.values()|list|tojson }},
+            backgroundColor: ['#800020','#2B2B2B','#a0002a','#5a0016','#3a3a3a','#c0002e','#1e1e1e','#d4002f']
+        }]
+    },
+    options: {
+        plugins: { legend: { position: 'bottom', labels: { font: { size: 12 } } } }
+    }
+});
+
+const severityCtx = document.getElementById('severityChart');
+new Chart(severityCtx, {
+    type: 'doughnut',
+    data: {
+        labels: {{ severity_counts.keys()|list|tojson }},
+        datasets: [{
+            data: {{ severity_counts.values()|list|tojson }},
+            backgroundColor: ['#4caf50', '#ff9800', '#f44336', '#800020'],
+            borderWidth: 0
+        }]
+    },
+    options: {
+        plugins: { legend: { position: 'bottom', labels: { font: { size: 12 } } } },
+        cutout: '65%'
+    }
+});
+
+const statusCtx = document.getElementById('statusChart');
+new Chart(statusCtx, {
+    type: 'doughnut',
+    data: {
+        labels: ["Pending", "In Progress", "Resolved"],
+        datasets: [{
+            data: [
+                {{ status_counts["Pending"] }},
+                {{ status_counts["In Progress"] }},
+                {{ status_counts["Resolved"] }}
+            ],
+            backgroundColor: ['#e67e00', '#c9a800', '#1e7e34'],
+            borderWidth: 0
+        }]
+    },
+    options: {
+        plugins: { legend: { position: 'bottom', labels: { font: { size: 12 } } } },
+        cutout: '65%'
+    }
+});
 </script>
 
+<script src="{{ url_for('static', filename='js/background.js') }}"></script>
 </body>
 </html>

@@ -3,25 +3,139 @@
 <head>
     <title>Select Your Role</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .role-section {
+            max-width: 700px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+ 
+        .role-section h2 {
+            font-size: 30px;
+            margin-bottom: 6px;
+        }
+ 
+        .role-section .subtitle {
+            color: #5a5a5a;
+            font-size: 15px;
+            margin-bottom: 36px;
+        }
+ 
+        .role-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+ 
+        .role-option {
+            display: flex;
+            align-items: center;
+            padding: 22px 24px;
+            background: #fff;
+            border: 2px solid #e2e0dd;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #1e1e1e;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.25s ease;
+            gap: 14px;
+        }
+ 
+        .role-option .role-label {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+ 
+        .role-option .role-label span {
+            font-size: 13px;
+            font-weight: 400;
+            color: #888;
+        }
+ 
+        .role-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #800020;
+            flex-shrink: 0;
+        }
+ 
+        .role-option:hover {
+            border-color: #800020;
+            background: #800020;
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(128,0,32,0.25);
+        }
+ 
+        .role-option:hover .role-dot {
+            background: #fff;
+        }
+ 
+        .role-option:hover .role-label span {
+            color: rgba(255,255,255,0.7);
+        }
+ 
+        .back-link {
+            color: #800020;
+            font-size: 14px;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+ 
+        .back-link:hover {
+            opacity: 0.75;
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-    <header>DUT SafeAlert System</header>
-
-    <div class="container">
+    <header>DUT SafeAlert</header>
+ 
+    <div class="role-section">
+ 
         <h2>Who are you?</h2>
-
-        <div class="role-buttons">
-            <a href="{{ url_for('login', role='Student') }}" class="role-card">Student</a>
-            <a href="{{ url_for('login', role='Lecturer') }}" class="role-card">Lecturer</a>
-            <a href="{{ url_for('login', role='Security Officer') }}" class="role-card">Security Officer</a>
-            <a href="{{ url_for('login', role='Head of Security') }}" class="role-card">Head of Security</a>
+        <p class="subtitle">Select your role to continue to the login page.</p>
+ 
+        <div class="role-grid">
+            <a href="{{ url_for('login', role='Student') }}" class="role-option">
+                <div class="role-dot"></div>
+                <div class="role-label">
+                    Student
+                    <span>Report and track incidents</span>
+                </div>
+            </a>
+            <a href="{{ url_for('login', role='Lecturer') }}" class="role-option">
+                <div class="role-dot"></div>
+                <div class="role-label">
+                    Lecturer
+                    <span>Report and monitor campus safety</span>
+                </div>
+            </a>
+            <a href="{{ url_for('login', role='Security Officer') }}" class="role-option">
+                <div class="role-dot"></div>
+                <div class="role-label">
+                    Security Officer
+                    <span>Investigate and resolve incidents</span>
+                </div>
+            </a>
+            <a href="{{ url_for('login', role='Head of Security') }}" class="role-option">
+                <div class="role-dot"></div>
+                <div class="role-label">
+                    Head of Security
+                    <span>Manage officers and oversee all incidents</span>
+                </div>
+            </a>
         </div>
-
-        <div style="text-align:center; margin-top:20px;">
-            <a href="{{ url_for('home') }}" class="btn">Back to Home</a>
-        </div>
+ 
+        <a href="{{ url_for('home') }}" class="back-link">← Back to Home</a>
+ 
     </div>
-
+ 
     <footer>&copy; 2026 Durban University of Technology</footer>
+<script src="{{ url_for('static', filename='js/background.js') }}"></script>
 </body>
 </html>

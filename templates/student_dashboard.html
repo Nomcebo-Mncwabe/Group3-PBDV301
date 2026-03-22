@@ -3,12 +3,149 @@
 <head>
     <title>Student Dashboard</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .dashboard-header h2 {
+            margin: 0;
+            padding: 0;
+        }
+
+        .dashboard-header h2::after {
+            display: none;
+        }
+
+        .welcome-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e1e1e;
+        }
+
+        .welcome-subtitle {
+            color: #5a5a5a;
+            font-size: 15px;
+            margin-bottom: 28px;
+            margin-top: 4px;
+        }
+
+        .alert-banner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #fff5f5;
+            border: 1px solid #f5c6cb;
+            border-left: 4px solid #800020;
+            border-radius: 10px;
+            padding: 14px 20px;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .alert-banner-text {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            color: #800020;
+            font-size: 15px;
+        }
+
+        .alert-dot {
+            width: 10px;
+            height: 10px;
+            background: #800020;
+            border-radius: 50%;
+            flex-shrink: 0;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.3); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .alert-count {
+            background: #800020;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 12px;
+        }
+
+        .alert-banner-link {
+            background: #800020;
+            color: #fff;
+            padding: 8px 18px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+
+        .alert-banner-link:hover {
+            background: #5a0016;
+        }
+
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-top: 8px;
+        }
+
+        @media (max-width: 600px) {
+            .dashboard-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .logout-section {
+            margin-top: 36px;
+            padding-top: 24px;
+            border-top: 1px solid #e2e0dd;
+        }
+
+        .logout-btn {
+            background: transparent;
+            border: 2px solid #e2e0dd;
+            color: #5a5a5a;
+            font-size: 14px;
+            padding: 10px 22px;
+            box-shadow: none;
+        }
+
+        .logout-btn:hover {
+            border-color: #800020;
+            color: #800020;
+            background: transparent;
+            transform: none;
+            box-shadow: none;
+        }
+    </style>
 </head>
 <body>
     <header>DUT SafeAlert - Student Dashboard</header>
 
     <div class="container">
-        <h2>Welcome {{ session['username'] }}!</h2>
+
+        <div class="dashboard-header">
+            <div>
+                <div class="welcome-title">Welcome, {{ session['username'] }}!</div>
+                <p class="welcome-subtitle">Here's your SafeAlert overview. Report incidents and track their progress below.</p>
+            </div>
+        </div>
 
         {% with messages = get_flashed_messages() %}
             {% if messages %}
@@ -20,37 +157,40 @@
             {% endif %}
         {% endwith %}
 
-        <!-- CRITICAL ALERTS BUTTON -->
-        <div style="margin-bottom:20px;">
-            <a href="{{ url_for('view_critical_alerts') }}" class="btn btn-warning">
-                <i class="fa fa-exclamation-circle"></i> Critical Alerts
+        <!-- CRITICAL ALERTS BANNER -->
+        <div class="alert-banner">
+            <div class="alert-banner-text">
+                <div class="alert-dot"></div>
+                Critical Alerts
                 {% if critical_alert_count > 0 %}
-                    <span class="badge badge-danger">{{ critical_alert_count }}</span>
+                    <span class="alert-count">{{ critical_alert_count }} new</span>
+                {% else %}
+                    <span style="font-weight:400; color:#888; font-size:14px;">No active alerts</span>
                 {% endif %}
-            </a>
+            </div>
+            <a href="{{ url_for('view_critical_alerts') }}" class="alert-banner-link">View Alerts</a>
         </div>
-
 
         <div class="dashboard-cards">
             <div class="card">
                 <h3>Report Incident</h3>
-                <p>Submit a new safety incident report.</p>
-                <a href="{{ url_for('report_incident') }}">
-                    <button>Report Now</button>
-                </a>
+                <p>Submit a new safety incident report for your campus.</p>
+                <a href="{{ url_for('report_incident') }}" class="btn">Report Now</a>
             </div>
             <div class="card">
                 <h3>View Incident Status</h3>
-                <p>View incident status updates </p>
-                <a href="{{ url_for('view_incident_status') }}" class="btn">View Incident Status</a>
+                <p>Track the progress and updates on your submitted reports.</p>
+                <a href="{{ url_for('view_incident_status') }}" class="btn">View My Reports</a>
             </div>
         </div>
 
-        <div style="margin-top:30px;">
-            <a href="{{ url_for('home') }}"><button>Logout</button></a>
+        <div class="logout-section">
+            <a href="{{ url_for('home') }}" class="btn logout-btn">Logout</a>
         </div>
+
     </div>
 
     <footer>&copy; 2026 Durban University of Technology</footer>
+<script src="{{ url_for('static', filename='js/background.js') }}"></script>
 </body>
 </html>
