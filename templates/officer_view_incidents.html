@@ -1,95 +1,92 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Security Officer - View Incidents</title>
+<title>Security Officer - My Assigned Incidents</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
 <style>
-
 /* Incident card layout */
-
 .incident-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit, minmax(320px,1fr));
-gap:20px;
-margin-top:20px;
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(320px,1fr));
+    gap:20px;
+    margin-top:20px;
 }
 
 .incident-card{
-background:white;
-padding:20px;
-border-radius:10px;
-box-shadow:0 2px 6px rgba(0,0,0,0.1);
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 2px 6px rgba(0,0,0,0.1);
 }
 
 .incident-card h3{
-margin-top:0;
-color:#800020;
+    margin-top:0;
+    color:#800020;
 }
 
 .incident-meta{
-font-size:14px;
-color:#555;
-margin-bottom:8px;
+    font-size:14px;
+    color:#555;
+    margin-bottom:8px;
 }
 
 .incident-desc{
-margin:10px 0;
-font-size:14px;
-line-height:1.4;
+    margin:10px 0;
+    font-size:14px;
+    line-height:1.4;
 }
 
 /* Status badge */
-
 .status-badge{
-display:inline-block;
-padding:5px 10px;
-border-radius:12px;
-font-size:13px;
-font-weight:600;
-margin-bottom:10px;
+    display:inline-block;
+    padding:5px 10px;
+    border-radius:12px;
+    font-size:13px;
+    font-weight:600;
+    margin-bottom:10px;
 }
 
 .status-pending{
-background:#ffe5b4;
-color:#8a5300;
+    background:#ffe5b4;
+    color:#8a5300;
 }
 
 .status-in-progress{
-background:#d9ecff;
-color:#0b5394;
+    background:#d9ecff;
+    color:#0b5394;
 }
 
 .status-resolved{
-background:#d4edda;
-color:#155724;
+    background:#d4edda;
+    color:#155724;
 }
 
 /* Buttons */
-
 .card-buttons{
-margin-top:10px;
-display:flex;
-gap:10px;
-flex-wrap:wrap;
+    margin-top:10px;
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
 }
 
 .investigate-btn{
-background:#800020;
-color:white;
-padding:8px 14px;
-border-radius:6px;
-text-decoration:none;
+    background:#800020;
+    color:white;
+    padding:8px 14px;
+    border-radius:6px;
+    text-decoration:none;
 }
 
 .update-btn{
-padding:6px 12px;
+    padding:6px 12px;
+    margin-top:5px;
 }
 
 .status-form{
-margin-top:10px;
+    margin-top:10px;
+    max-width:75%;
 }
-
 </style>
 </head>
 
@@ -104,75 +101,65 @@ margin-top:10px;
 
 {% with messages = get_flashed_messages() %}
 {% if messages %}
-{% for message in messages %}
-<div class="flash-message">{{ message }}</div>
-{% endfor %}
+    {% for message in messages %}
+    <div class="flash-message">{{ message }}</div>
+    {% endfor %}
 {% endif %}
 {% endwith %}
 
 <div class="incident-grid">
 
 {% for incident in incidents %}
-
 <div class="incident-card">
 
-<h3>{{ incident.title }}</h3>
+    <h3>{{ incident.title }}</h3>
 
-<div class="incident-meta">
-<strong>Category:</strong> {{ incident.category }}
-</div>
+    <div class="incident-meta">
+        <strong>Category:</strong> {{ incident.category }}
+    </div>
 
-<div class="incident-meta">
-<strong>Date:</strong> {{ incident.incident_date }}
-</div>
+    <div class="incident-meta">
+        <strong>Date:</strong> {{ incident.incident_date }}
+    </div>
 
-<div class="incident-meta">
-<strong>Campus:</strong> {{ incident.location }}
-</div>
+    <div class="incident-meta">
+        <strong>Campus:</strong> {{ incident.location }}
+    </div>
 
-<div class="incident-desc">
-<strong>Description:</strong><br>
-{{ incident.description }}
-</div>
+    <div class="incident-desc">
+        <strong>Description:</strong><br>
+        {{ incident.description }}
+    </div>
 
-<div class="incident-meta">
-<strong>Reported By:</strong>
-{{ incident.reported_by_username }} ({{ incident.reported_by_role }})
-</div>
+    <div class="incident-meta">
+        <strong>Reported By:</strong>
+        {{ incident.reported_by_username }} ({{ incident.reported_by_role }})
+    </div>
 
-<div class="incident-meta">
-<strong>Status:</strong>
-<span class="status-badge status-{{ incident.status|lower|replace(' ','-') if incident.status else 'pending' }}">
-{{ incident.status if incident.status else "Pending" }}
-</span>
-</div>
+    <div class="incident-meta">
+        <strong>Status:</strong>
+        {% set status = incident.status or "Pending" %}
+        <span class="status-badge status-{{ status|lower|replace(' ', '-') }}">
+            {{ status }}
+        </span>
+    </div>
 
-<div class="card-buttons">
+    <div class="card-buttons">
+        <a href="{{ url_for('investigate_incident', incident_id=incident.id) }}" class="investigate-btn">
+            Investigate
+        </a>
+    </div>
 
-<a href="{{ url_for('investigate_incident', incident_id=incident.id) }}" class="investigate-btn">
-Investigate
-</a>
-
-</div>
-
-<form action="{{ url_for('update_status', incident_id=incident.id) }}" method="post" class="status-form">
-
-<select name="status">
-
-<option value="Pending" {{ 'selected' if incident.status=='Pending' else '' }}>Pending</option>
-
-<option value="In Progress" {{ 'selected' if incident.status=='In Progress' else '' }}>In Progress</option>
-
-<option value="Resolved" {{ 'selected' if incident.status=='Resolved' else '' }}>Resolved</option>
-
-</select>
-
-<button type="submit" class="update-btn">Update</button>
-
-</form>
+    <form action="{{ url_for('update_status', incident_id=incident.id) }}" method="post" class="status-form">
+        <select name="status">
+            <option value="Pending" {{ 'selected' if status=='Pending' else '' }}>Pending</option>
+            <option value="In Progress" {{ 'selected' if status=='In Progress' else '' }}>In Progress</option>
+            <option value="Resolved" {{ 'selected' if status=='Resolved' else '' }}>Resolved</option>
+        </select>
+        <button type="submit" class="update-btn">Update</button>
+    </form>
 
 </div>
-
 {% endfor %}
 
 </div>

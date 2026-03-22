@@ -444,21 +444,29 @@ def view_incident_status():
     )
 
 # ---------------- Investigate Incident ----------------
-@app.route('/investigate_incident/<int:incident_id>', methods=['GET','POST'])
+@app.route('/investigate/<int:incident_id>', methods=['GET', 'POST'])
 def investigate_incident(incident_id):
-    if 'username' not in session:
-        return redirect(url_for('login'))
-
     incident = Incident.query.get_or_404(incident_id)
 
     if request.method == 'POST':
-        incident.investigation_notes = request.form['investigation_notes']
-        incident.resolution_notes = request.form['resolution_notes']
-        incident.status = request.form['status']
+        # If incident was Pending and officer is submitting investigation, move to In Progress
+        if incident.status == "Pending":
+            incident.status = "In Progress"
+
+        # Update investigation/resolution notes
+        incident.investigation_notes = request.form.get('investigation_notes', incident.investigation_notes)
+        incident.resolution_notes = request.form.get('resolution_notes', incident.resolution_notes)
+
+        # Update status if officer selected Resolved (or keep In Progress)
+        form_status = request.form.get('status')
+        if form_status:
+            incident.status = form_status
+
         db.session.commit()
-        flash("Investigation updated successfully.")
+        flash("Incident updated successfully.")
         return redirect(url_for('officer_view_incidents'))
 
+    # GET request: just render page; do NOT auto-change status
     return render_template('investigate_incident.html', incident=incident)
 
 # ---------------- Manage Incidents Page for Head of Security ----------------
@@ -486,24 +494,20 @@ def manage_incidents():
 # Assign Officer
 @app.route('/assign_officer/<int:incident_id>', methods=['POST'])
 def assign_officer(incident_id):
-
     if session.get('role') != "Head of Security":
         flash("Access denied")
         return redirect(url_for('login', role='Head of Security'))
 
     officer_id = request.form.get('officer_id')
-
     officer = SecurityPersonnel.query.get(officer_id)
     incident = Incident.query.get_or_404(incident_id)
 
     if officer:
         incident.assigned_officer_id = officer.id
-        incident.status = "In Progress"
-
+        # Always reset status to Pending when newly assigned
+        incident.status = "Pending"
         db.session.commit()
-
-        flash(f"{officer.name} assigned to incident '{incident.title}'")
-
+        flash(f"{officer.name} assigned to incident '{incident.title}' and status set to Pending")
     else:
         flash("Officer not found")
 
@@ -542,15 +546,19 @@ def view_critical_alerts():
         flash("Access denied")
         return redirect(url_for('login'))
 
-    # Get user ID from session (you need to store it at login)
-    user_id = session.get('user_id')
+    # Get filter from query params
+    status_filter = request.args.get('status', 'all')
 
-    # Fetch alerts assigned to the user OR critical alerts
-    alerts = Alert.query.filter(
-        (Alert.recipient_id == user_id) | (Alert.priority == 'Critical')
-    ).order_by(Alert.timestamp.desc()).all()
+    alerts_query = Alert.query.order_by(Alert.timestamp.desc())
 
-    return render_template('view_critical_alerts.html', alerts=alerts)
+    if status_filter == 'ongoing':
+        alerts_query = alerts_query.join(Incident).filter(Incident.status != 'Resolved')
+    elif status_filter == 'resolved':
+        alerts_query = alerts_query.join(Incident).filter(Incident.status == 'Resolved')
+
+    alerts = alerts_query.all()
+
+    return render_template('view_critical_alerts.html', alerts=alerts, selected_status=status_filter)
 
 # ---------------- Head of Security: Create Critical Alert ----------------
 @app.route('/create_critical_alert', methods=['GET', 'POST'])
@@ -571,21 +579,17 @@ def create_critical_alert():
             flash("Alert message cannot be empty")
             return redirect(url_for('create_critical_alert'))
 
-        # --- This is where your snippet goes ---
+        # Get linked incident (optional)
         incident_id = request.form.get('incident_id') or None
-        incident_title = request.form.get('incident_title') or None
-        incident_location = request.form.get('incident_location') or None
 
+        # Create the alert WITHOUT incident_title or incident_location
         new_alert = Alert(
             message=message,
             priority='Critical',
             incident_id=incident_id,
-            incident_title=incident_title,
-            incident_location=incident_location,
             timestamp=datetime.now(),
-            recipient_id=None  # optional: leave blank or assign to specific users
+            recipient_id=None
         )
-        # ----------------------------------------
 
         db.session.add(new_alert)
         db.session.commit()

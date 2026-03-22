@@ -6,39 +6,38 @@
 </head>
 <body>
 
-<header>DUT SafeAlert - Incident Management</header>
+        <header>DUT SafeAlert - Incident Management</header>
 
-<div class="container">
+        <div class="container">
 
-<h2>All Reported Incidents</h2>
+        <h2>All Reported Incidents</h2>
 
-<!-- Flash messages -->
-{% with messages = get_flashed_messages(with_categories=true) %}
-{% if messages %}
-<div class="flash-message">
-{% for category, message in messages %}
-<p class="{{ category }}">{{ message }}</p>
-{% endfor %}
-</div>
-{% endif %}
-{% endwith %}
+        <!-- Flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-message">
+                    {% for category, message in messages %}
+                        <p class="{{ category }}">{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
 
-<table border="1" width="100%">
+        <table border="1" width="100%">
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Location</th>
+                <th>Reported By</th>
+                <th>Severity</th>
+                <th>Status</th>
+                <th>Assigned Officer</th>
+                <th>Officers On Duty</th>
+            </tr>
 
-<tr>
-<th>Title</th>
-<th>Description</th>
-<th>Location</th>
-<th>Reported By</th>
-<th>Severity</th>
-<th>Status</th>
-<th>Assigned Officer</th>
-<th>Officers On Duty</th>
-</tr>
+            {% for incident in incidents %}
 
-{% for incident in incidents %}
-
-<tr>
+            <tr>
 
 <td>{{ incident.title }}</td>
 <td>{{ incident.description }}</td>

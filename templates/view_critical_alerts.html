@@ -4,7 +4,7 @@
     <title>Critical Alerts</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <style>
-        /* Override styles for alerts page */
+        /* ===== Page-specific overrides ===== */
         .alert-container {
             display: flex;
             flex-direction: column;
@@ -13,12 +13,21 @@
         }
 
         .alert-card {
-            background: #ffe6e6; /* light red for critical */
-            border-left: 6px solid #d32f2f; /* darker red stripe */
             padding: 20px 25px;
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        /* Card colors based on status */
+        .alert-card.ongoing {
+            background: #ffe6e6;
+            border-left: 6px solid #d32f2f;
+        }
+
+        .alert-card.resolved {
+            background: #d4edda;
+            border-left: 6px solid #28a745;
         }
 
         .alert-card:hover {
@@ -46,6 +55,42 @@
         .back-btn {
             margin-top: 30px;
         }
+
+        /* ===== Filter Form ===== */
+        .filter-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 25px;
+            align-items: flex-start; /* stack items vertically */
+        }
+
+        .filter-item label {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .filter-item select {
+            width: 75%;   /* adjusted width */
+            max-width: 300px;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        .filter-button {
+            display: flex;
+            justify-content: flex-start; /* align with select box */
+            width: 75%; /* same width as select */
+        }
+
+        .filter-button .btn {
+            padding: 14px 28px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+        }
     </style>
 </head>
 <body>
@@ -56,10 +101,25 @@
 
     <h2>Critical Alerts</h2>
 
+    <!-- ===== Filter Form ===== -->
+    <form method="GET" action="{{ url_for('view_critical_alerts') }}" class="filter-form">
+        <div class="filter-item">
+            <label for="status">Filter by Status:</label>
+            <select name="status" id="status">
+                <option value="all" {% if request.args.get('status') == 'all' %}selected{% endif %}>All</option>
+                <option value="ongoing" {% if request.args.get('status') == 'ongoing' %}selected{% endif %}>On-going</option>
+                <option value="resolved" {% if request.args.get('status') == 'resolved' %}selected{% endif %}>Resolved</option>
+            </select>
+        </div>
+        <div class="filter-button">
+            <button type="submit" class="btn">Filter</button>
+        </div>
+    </form>
+
     {% if alerts %}
     <div class="alert-container">
         {% for alert in alerts %}
-        <div class="alert-card">
+        <div class="alert-card {% if alert.status == 'resolved' %}resolved{% else %}ongoing{% endif %}">
             <div class="alert-message">{{ alert.message }}</div>
             {% if alert.incident %}
                 <div class="alert-incident">Incident: {{ alert.incident.title }} - {{ alert.incident.location }}</div>
