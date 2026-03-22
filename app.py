@@ -20,7 +20,8 @@ def get_user_id():
 # ---------------- App Initialization ----------------
 app = Flask(__name__)
 app.secret_key = "your_secret_key"
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///safealert.db'
+import os
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///safealert.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
@@ -96,6 +97,7 @@ def login():
 
         session['username'] = user.username
         session['role'] = user.role
+        session['user_id'] = user.id # Store user ID for later use  
 
         # Ensure SecurityPersonnel record exists for Security Officer
         if role == "Security Officer":

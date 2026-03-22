@@ -77,7 +77,22 @@
             border-radius: 6px;
             margin: 0;
         }
+        .severity-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
 
+        .severity-minor { background: #d1ecf1; color: #0c5460; }
+        .severity-moderate { background: #ffeeba; color: #856404; }
+        .severity-severe { background: #f8d7da; color: #721c24; }
+        .severity-critical { background: #800020; color: white; }
+        
+        
         .status-badge {
             display: inline-block;
             padding: 4px 10px;
@@ -177,15 +192,19 @@
                     {% endif %}
                 </td>
                 <td>
-                    <form method="POST" action="{{ url_for('update_incident_severity', incident_id=incident.id) }}" class="severity-form">
-                        <select name="severity">
-                            <option value="Minor" {% if incident.severity=="Minor" %}selected{% endif %}>Minor</option>
-                            <option value="Moderate" {% if incident.severity=="Moderate" %}selected{% endif %}>Moderate</option>
-                            <option value="Severe" {% if incident.severity=="Severe" %}selected{% endif %}>Severe</option>
-                            <option value="Critical" {% if incident.severity=="Critical" %}selected{% endif %}>Critical</option>
-                        </select>
-                        <button type="submit">Update</button>
-                    </form>
+                    {% if incident.severity %}
+                        <span class="severity-badge severity-{{ incident.severity|lower }}">{{ incident.severity }}</span>
+                    {% else %}
+                        <form method="POST" action="{{ url_for('update_incident_severity', incident_id=incident.id) }}" class="severity-form">
+                            <select name="severity">
+                                <option value="Minor">Minor</option>
+                                <option value="Moderate">Moderate</option>
+                                <option value="Severe">Severe</option>
+                                <option value="Critical">Critical</option>
+                            </select>
+                            <button type="submit">Set</button>
+                        </form>
+                    {% endif %}
                 </td>
                 <td>
                     <span class="status-badge status-{{ incident.status|lower|replace(' ','-') if incident.status else 'pending' }}">
