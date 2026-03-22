@@ -20,7 +20,8 @@ def get_user_id():
 # ---------------- App Initialization ----------------
 app = Flask(__name__)
 app.secret_key = "your_secret_key"
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///safealert.db'
+import os
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///safealert.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
