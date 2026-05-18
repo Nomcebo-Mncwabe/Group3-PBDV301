@@ -69,6 +69,9 @@ class Alert(db.Model):
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     incident_id = db.Column(db.Integer, db.ForeignKey('incidents.id'), nullable=True)
     recipient_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
+    sent_via = db.Column(db.String(20), default='App')  # App, SMS, Email, Push
+    is_sent = db.Column(db.Boolean, default=False)
+    expires_at = db.Column(db.DateTime, nullable=True)
 
     # Relationship to access incident details from an alert
     incident = db.relationship('Incident', backref='alerts', lazy=True)
@@ -90,6 +93,11 @@ class SecurityPersonnel(db.Model):
     employment_status = db.Column(db.String(50), default="Active")
 
     attendance_records = db.relationship('Attendance', backref='personnel', lazy=True)
+
+    assigned_site = db.Column(db.String(100), nullable=True)  # Site name or ID
+    assigned_shift = db.Column(db.String(20), nullable=True)  # Morning, Night, 12h
+    emergency_contact_name = db.Column(db.String(100), nullable=True)
+    emergency_contact_phone = db.Column(db.String(20), nullable=True)
 
 
 class Attendance(db.Model):
